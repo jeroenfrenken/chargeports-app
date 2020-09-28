@@ -1,19 +1,32 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import store from './src/store/model';
+import { StoreProvider } from 'easy-peasy';
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
+import LoginScreen from './src/views/authentication/screens/LoginScreen';
 
-export default function App() {
-  return (
-    <View style={styles.container}>
-      <Text>Open up App.tsx to start working on your app!</Text>
-    </View>
-  );
-}
+const Stack = createStackNavigator();
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+const Navigation = ({ children }: { children: React.ReactNode }) => {
+    return (
+        <NavigationContainer>
+            <Stack.Navigator>
+                {children}
+            </Stack.Navigator>
+        </NavigationContainer>
+    );
+};
+
+const App = () => {
+    return (
+        <Navigation>
+            <Stack.Screen name="Login" component={LoginScreen}/>
+        </Navigation>
+    );
+};
+
+export default () => (
+    <StoreProvider store={store}>
+        <App/>
+    </StoreProvider>
+)
