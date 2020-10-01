@@ -28,19 +28,13 @@ export default ({ navigation }: Props) => {
                     password
                 }));
 
-                console.log('Hier Kwam ik 2');
-                console.log(res);
-
                 if ( res.data.token !== undefined ) {
                     loginAction(res.data.token);
                 }
             } catch (e) {
-                console.log('Hier Kwam ik');
-                console.log(e);
                 Alert.alert('Failed', 'Credentials not valid');
             }
         } else {
-            console.log('Hier Kwam ik 3');
             Alert.alert('Failed', 'Credentials not valid');
         }
     }
