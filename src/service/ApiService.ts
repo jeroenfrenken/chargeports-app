@@ -1,7 +1,7 @@
 import { AxiosResponse, AxiosError } from 'axios';
 import { Configuration, DefaultApi, User } from '../api';
 
-const basePath = "http://192.168.2.247";
+const basePath = "http://192.168.178.213";
 
 export class ApiService {
     static default: DefaultApi;
