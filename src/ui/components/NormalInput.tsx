@@ -2,13 +2,19 @@ import styled from 'styled-components/native';
 
 export default styled.TextInput`
     background: #FFFFFF;
-    border: 1px solid #B2BEC3;
     elevation: 3;
     padding: 20px 25px;
+    flex: 2;
 
     border-radius: 5px;
     font-size: 16px;
     color: #333333;
     letter-spacing: 0;
-    width: 100%;
+    
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: row;
+    
+    box-shadow: 7px 5px 5px #0000003d;
 `;
