@@ -1,4 +1,5 @@
 import React from 'react';
+import { ApiService } from './src/service/ApiService';
 import { useStoreState } from './src/store/hooks';
 import store from './src/store/model';
 import { StoreProvider } from 'easy-peasy';
@@ -10,6 +11,8 @@ import RegisterScreen from './src/views/authentication/screens/RegisterScreen';
 import MapScreen from './src/views/map/screens/MapScreen';
 
 const Stack = createStackNavigator();
+
+ApiService.setup();
 
 const BaseNavigation = ({ children }: { children: React.ReactNode }) => {
     return (
