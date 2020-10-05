@@ -1,10 +1,11 @@
 import React from 'react';
 import MapView from 'react-native-maps';
 import styled from 'styled-components/native';
+// @ts-ignore
 import MenuBarIcon from "../../../assets/icons/MenuIcon.svg";
 import { StackScreenProps } from '@react-navigation/stack';
 import { RootStackParamList } from '../../../../RootStack';
-import { StyleSheet, View, Dimensions, SafeAreaView, Text } from 'react-native';
+import { StyleSheet, View, Dimensions, SafeAreaView } from 'react-native';
 import NormalInput from '../../../ui/components/NormalInput';
 
 type Props = StackScreenProps<RootStackParamList, 'Map'>;
@@ -62,7 +63,7 @@ export default ({ navigation }: Props) => {
                     returnKeyType="done"
                     style={{ marginTop: 10 }}
                     autoCapitalize="none"
-                ></NormalInput>
+                />
             </SafeAreaView>
         </View>
     );
