@@ -1,6 +1,6 @@
 import React from 'react';
-import styled from 'styled-components/native'
-import { Text, TouchableOpacityProps } from 'react-native';
+import styled from 'styled-components/native';
+import { TouchableOpacityProps } from 'react-native';
 
 export const NormalButtonContainer = styled.TouchableOpacity<{ color?: string }>`
   background: ${props => props.color || props.theme.colors.primary};

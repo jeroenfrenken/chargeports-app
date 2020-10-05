@@ -1,6 +1,7 @@
 import * as React from 'react';
-import MapMarker from '../../../assets/charger.svg';
-import {Dimensions, StyleSheet, View} from "react-native";
+// @ts-ignore
+import MapMarker from '../../../assets/icons/Charger.svg';
+import { StyleSheet, View } from 'react-native';
 
 const styles = StyleSheet.create({
     wrapper: {
@@ -9,7 +10,7 @@ const styles = StyleSheet.create({
         shadowColor: '#000',
         shadowRadius: 5,
         shadowOpacity: 0.4,
-        shadowOffset: {width: 0, height: 0},
+        shadowOffset: { width: 0, height: 0 }
     },
     mapMarker: {
         flex: 1,
@@ -19,7 +20,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         borderRadius: 5,
         width: 30,
-        height: 30,
+        height: 30
     },
     triangle: {
         left: 10,
@@ -33,7 +34,7 @@ const styles = StyleSheet.create({
         borderLeftColor: 'transparent',
         borderRightColor: 'transparent',
         borderTopColor: '#FFF'
-    },
+    }
 });
 
 export default () => (
@@ -41,6 +42,6 @@ export default () => (
         <View style={styles.mapMarker}>
             <MapMarker width={20} height={20}/>
         </View>
-        <View style={styles.triangle} />
+        <View style={styles.triangle}/>
     </View>
 );

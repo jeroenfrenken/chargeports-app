@@ -6,9 +6,9 @@ import { StoreProvider } from 'easy-peasy';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import DefaultTheme from './src/ui/theme/DefaultTheme';
+import AuthenticatedScreen from './src/views/authenticated/screens/AuthenticatedScreen';
 import LoginScreen from './src/views/authentication/screens/LoginScreen';
 import RegisterScreen from './src/views/authentication/screens/RegisterScreen';
-import MapScreen from './src/views/map/screens/MapScreen';
 
 const Stack = createStackNavigator();
 
@@ -52,11 +52,11 @@ const App = () => {
         return (
             <BaseNavigation>
                 <Stack.Screen
-                    name="Map"
+                    name="Authenticated"
                     options={{
                         headerShown: false
                     }}
-                    component={MapScreen}
+                    component={AuthenticatedScreen}
                 />
             </BaseNavigation>
         );
