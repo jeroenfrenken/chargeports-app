@@ -5126,6 +5126,11 @@ react-native-maps@^0.27.1:
   resolved "https://registry.yarnpkg.com/react-native-maps/-/react-native-maps-0.27.1.tgz#2f10cd417bb2fd938c9e015b1c9b6d9b1a44b97f"
   integrity sha512-HygBkZBecTnIVRYrSiLRAvu4OmXOYso/A7c6Cy73HkOh9CgGV8Ap5eBea24tvmFGptjj5Hg8AJ94/YbmWK1Okw==
 
+react-native-popup-navigation@^0.2.0:
+  version "0.2.0"
+  resolved "https://registry.yarnpkg.com/react-native-popup-navigation/-/react-native-popup-navigation-0.2.0.tgz#f5f122618469d8ce50c7c001c3d294e9bfbd298d"
+  integrity sha512-HUaL1bVh1nB83Az20rsY2vjYNilfo4Ol8nz0HKRqU1ylyDr9X4G90XSaLcdbN9GCYOiZohEp0xlNmOuu/HD3HA==
+
 react-native-reanimated@^1.13.1:
   version "1.13.1"
   resolved "https://registry.yarnpkg.com/react-native-reanimated/-/react-native-reanimated-1.13.1.tgz#c370c32cc4d447ae896cb029bb9c6a2f7608c5b4"
