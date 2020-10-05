@@ -6,6 +6,7 @@
     "@react-navigation/drawer": "^5.9.2",
     "@react-navigation/native": "^5.7.5",
     "@react-navigation/stack": "^5.9.2",
+    "@types/dotenv": "^8.2.0",
     "axios": "^0.20.0",
     "dotenv": "^8.2.0",
     "easy-peasy": "^3.3.1",
