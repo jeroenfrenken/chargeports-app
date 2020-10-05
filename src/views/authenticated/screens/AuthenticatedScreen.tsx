@@ -8,7 +8,7 @@ import MapScreenNavigator from './MapScreenNavigator';
 
 const Drawer = createDrawerNavigator();
 
-export default function App() {
+export default function AuthenticatedScreen() {
     const logoutAction = useStoreActions(state => state.auth.logout);
 
     return (

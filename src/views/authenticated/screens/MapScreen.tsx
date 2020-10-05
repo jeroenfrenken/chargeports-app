@@ -1,22 +1,15 @@
 import React from 'react';
 import MapView, { Marker } from 'react-native-maps';
-import styled from 'styled-components/native';
 // @ts-ignore
 import MenuBarIcon from '../../../assets/icons/MenuIcon.svg';
 // @ts-ignore
 import LocationIcon from '../../../assets/icons/LocationIcon.svg';
 // @ts-ignore
 import FilterIcon from '../../../assets/icons/FilterIcon.svg';
-import { StackScreenProps } from '@react-navigation/stack';
-import { RootStackParamList } from '../../../../RootStack';
 import { StyleSheet, View, Dimensions, SafeAreaView, Keyboard, InteractionManager } from 'react-native';
 import MapInput from '../../../ui/components/MapInput';
 import { MenuButton } from '../../../ui/components/MenuButton';
-import NormalInput from '../../../ui/components/NormalInput';
 import MapMarker from '../components/MapMarker';
-
-interface Props extends StackScreenProps<RootStackParamList, 'Map'> {
-}
 
 const styles = StyleSheet.create({
     container: {
