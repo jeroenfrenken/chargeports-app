@@ -12,8 +12,6 @@ You will need to install yarn locally
 
 ### Changing basePath
 
-For now, you will need to update your base path in /src/service/ApiService.ts
-change the variable `const basePath` to your local ip. This needs to be changed to
-env variables.
+Copy `.env.example` and rename it to `.env`. Now enter your own url in `.env`
 
 

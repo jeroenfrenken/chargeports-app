@@ -1,4 +1,5 @@
 import { AxiosResponse, AxiosError } from 'axios';
+import Constants from 'expo-constants';
 import { Configuration, DefaultApi, User } from '../api';
 
 export class ApiService {
@@ -38,12 +39,12 @@ export class ApiService {
         if ( ApiService.token !== null ) {
             return new Configuration({
                 apiKey: ApiService.token,
-                basePath: "http://192.168.2.247"
+                basePath: Constants.manifest.extra.apiUrl
             });
         }
 
         return new Configuration({
-            basePath: "http://192.168.2.247"
+            basePath: Constants.manifest.extra.apiUrl
         });
     }
 }
