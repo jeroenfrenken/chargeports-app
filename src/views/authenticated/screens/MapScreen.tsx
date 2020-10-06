@@ -1,42 +1,45 @@
 import React from 'react';
 import MapView, { Marker } from 'react-native-maps';
-import styled from 'styled-components/native';
 // @ts-ignore
-import MenuBarIcon from "../../../assets/icons/MenuIcon.svg";
-import { StackScreenProps } from '@react-navigation/stack';
-import { RootStackParamList } from '../../../../RootStack';
-import { StyleSheet, View, Dimensions, SafeAreaView } from 'react-native';
-import NormalInput from '../../../ui/components/NormalInput';
+import MenuBarIcon from '../../../assets/icons/MenuIcon.svg';
+// @ts-ignore
+import LocationIcon from '../../../assets/icons/LocationIcon.svg';
+// @ts-ignore
+import FilterIcon from '../../../assets/icons/FilterIcon.svg';
+import { StyleSheet, View, Dimensions, SafeAreaView, Keyboard, InteractionManager } from 'react-native';
+import MapInput from '../../../ui/components/MapInput';
+import { MenuButton } from '../../../ui/components/MenuButton';
 import MapMarker from '../components/MapMarker';
-
-type Props = StackScreenProps<RootStackParamList, 'Map'>;
-
 const styles = StyleSheet.create({
     container: {
         flex: 1,
         alignItems: 'center',
         justifyContent: 'center'
     },
+    topBarContainer: {
+        flex: 1,
+        top: 0,
+        height: 120,
+        width: '90%',
+        position: 'absolute',
+        justifyContent: 'center',
+        flexDirection: 'row'
+    },
     mapStyle: {
         width: Dimensions.get('window').width,
         height: Dimensions.get('window').height
+    },
+    inputContainer: {
+        flexDirection: 'row',
+        paddingBottom: 10,
+        flex: 2
+    },
+    filterIcon: {
+        position: 'absolute',
+        top: 25,
+        right: 20
     }
 });
-
-const MenuButton = styled.TouchableOpacity<{ color?: string }>`
-  background: ${props => props.color || props.theme.colors.primary};
-  padding: 10px;
-
-  border-radius: 10px;
-  margin-right: 10px;
-  margin-top: 18px;
-
-  width: 40px;
-  height: 42px
-  display: flex;
-  justify-content: center;
-  align-items: center;
-`;
 
 const locations = [
     {
@@ -59,39 +62,49 @@ const locations = [
     }
 ];
 
-export default ({ navigation }: Props) => {
+export default (props: any) => {
     return (
         <View style={styles.container}>
             <MapView style={styles.mapStyle}>
-                { locations.map(marker => (
-                    <Marker key = {marker.id} coordinate = {{ latitude: marker.latitude, longitude: marker.longitude }} title = {marker.title}>
+                {locations.map(marker => (
+                    <Marker
+                        key={marker.id}
+                        coordinate={{ latitude: marker.latitude, longitude: marker.longitude }}
+                        title={marker.title}
+                    >
                         <MapMarker/>
                     </Marker>
-                )) }
+                ))}
             </MapView>
             <SafeAreaView
-                style={{
-                    flex: 1,
-                    top: 0,
-                    height: 150,
-                    width: '90%',
-                    position: 'absolute',
-                    alignItems: 'top',
-                    justifyContent: 'center',
-                    flexDirection: 'row'
-                }}
+                style={styles.topBarContainer}
             >
                 <MenuButton
-                    onPress={() => navigation.openDrawer()}
+                    onPress={() => {
+                        Keyboard.dismiss();
+                        InteractionManager.runAfterInteractions(() => {
+                            props.openMenu();
+                        });
+                    }}
                 >
-                    <MenuBarIcon />
+                    <MenuBarIcon/>
                 </MenuButton>
-                <NormalInput
-                    placeholder="Voer een locatie in"
-                    returnKeyType="done"
-                    style={{ marginTop: 10 }}
-                    autoCapitalize="none"
-                />
+                <View style={styles.inputContainer}>
+                    <MapInput
+                        placeholder="Voer een locatie in"
+                        returnKeyType="done"
+                        autoCapitalize="none"
+                    />
+                    <FilterIcon
+                        style={styles.filterIcon}
+                        onPress={() => {
+                            Keyboard.dismiss();
+                            InteractionManager.runAfterInteractions(() => {
+                                props.present('FilterScreen');
+                            });
+                        }}
+                    />
+                </View>
             </SafeAreaView>
         </View>
     );

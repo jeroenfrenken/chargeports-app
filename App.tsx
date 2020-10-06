@@ -7,6 +7,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import DefaultTheme from './src/ui/theme/DefaultTheme';
 import AuthenticatedScreen from './src/views/authenticated/screens/AuthenticatedScreen';
+import FilterScreen from './src/views/authenticated/screens/FilterScreen';
 import LoginScreen from './src/views/authentication/screens/LoginScreen';
 import RegisterScreen from './src/views/authentication/screens/RegisterScreen';
 
@@ -57,6 +58,13 @@ const App = () => {
                         headerShown: false
                     }}
                     component={AuthenticatedScreen}
+                />
+                <Stack.Screen
+                    name="FilterScreen"
+                    options={{
+                        headerShown: false
+                    }}
+                    component={FilterScreen}
                 />
             </BaseNavigation>
         );
