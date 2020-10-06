@@ -23,6 +23,43 @@ import { BASE_PATH, COLLECTION_FORMATS, RequestArgs, BaseAPI, RequiredError } fr
 /**
  * 
  * @export
+ * @interface Charger
+ */
+export interface Charger {
+    /**
+     * 
+     * @type {string}
+     * @memberof Charger
+     */
+    name?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof Charger
+     */
+    latitude?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof Charger
+     */
+    longitude?: string;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof Charger
+     */
+    isAvailable?: boolean;
+    /**
+     * 
+     * @type {string}
+     * @memberof Charger
+     */
+    uuid?: string;
+}
+/**
+ * 
+ * @export
  * @interface InlineResponse200
  */
 export interface InlineResponse200 {
@@ -233,6 +270,43 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
                 options: localVarRequestOptions,
             };
         },
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        chargersAll: async (options: any = {}): Promise<RequestArgs> => {
+            const localVarPath = `/api/charger`;
+            const localVarUrlObj = globalImportUrl.parse(localVarPath, true);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication apiKey required
+            if (configuration && configuration.apiKey) {
+                const localVarApiKeyValue = typeof configuration.apiKey === 'function'
+                    ? await configuration.apiKey("x-api-key")
+                    : await configuration.apiKey;
+                localVarHeaderParameter["x-api-key"] = localVarApiKeyValue;
+            }
+
+
+    
+            localVarUrlObj.query = {...localVarUrlObj.query, ...localVarQueryParameter, ...options.query};
+            // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
+            delete localVarUrlObj.search;
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: globalImportUrl.format(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
     }
 };
 
@@ -280,6 +354,18 @@ export const DefaultApiFp = function(configuration?: Configuration) {
                 return axios.request(axiosRequestArgs);
             };
         },
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async chargersAll(options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<Charger>>> {
+            const localVarAxiosArgs = await DefaultApiAxiosParamCreator(configuration).chargersAll(options);
+            return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
+                const axiosRequestArgs = {...localVarAxiosArgs.options, url: basePath + localVarAxiosArgs.url};
+                return axios.request(axiosRequestArgs);
+            };
+        },
     }
 };
 
@@ -314,6 +400,14 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
          */
         authenticationRegister(registerType?: RegisterType, options?: any): AxiosPromise<InlineResponse200> {
             return DefaultApiFp(configuration).authenticationRegister(registerType, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        chargersAll(options?: any): AxiosPromise<Array<Charger>> {
+            return DefaultApiFp(configuration).chargersAll(options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -355,6 +449,16 @@ export class DefaultApi extends BaseAPI {
      */
     public authenticationRegister(registerType?: RegisterType, options?: any) {
         return DefaultApiFp(this.configuration).authenticationRegister(registerType, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof DefaultApi
+     */
+    public chargersAll(options?: any) {
+        return DefaultApiFp(this.configuration).chargersAll(options).then((request) => request(this.axios, this.basePath));
     }
 }
 

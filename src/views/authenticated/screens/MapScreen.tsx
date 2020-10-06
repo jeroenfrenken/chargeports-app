@@ -1,12 +1,15 @@
-import React from 'react';
+import React, { useState } from 'react';
 import MapView, { Marker } from 'react-native-maps';
+import useAsyncEffect from 'use-async-effect';
+import { Charger } from '../../../api';
 // @ts-ignore
 import MenuBarIcon from '../../../assets/icons/MenuIcon.svg';
 // @ts-ignore
 import LocationIcon from '../../../assets/icons/LocationIcon.svg';
 // @ts-ignore
 import FilterIcon from '../../../assets/icons/FilterIcon.svg';
-import { StyleSheet, View, Dimensions, SafeAreaView, Keyboard, InteractionManager } from 'react-native';
+import { StyleSheet, View, Dimensions, SafeAreaView, Keyboard, InteractionManager, Alert } from 'react-native';
+import { ApiService } from '../../../service/ApiService';
 import MapInput from '../../../ui/components/MapInput';
 import { MenuButton } from '../../../ui/components/MenuButton';
 import MapMarker from '../components/MapMarker';
@@ -42,36 +45,27 @@ const styles = StyleSheet.create({
     }
 });
 
-const locations = [
-    {
-        id: 1,
-        title: 'Laadpaal Strijen',
-        latitude: 51.744690,
-        longitude: 4.550590
-    },
-    {
-        id: 2,
-        title: 'Laadpaal Numansdorp',
-        latitude: 51.727791,
-        longitude: 4.438850
-    },
-    {
-        id: 3,
-        title: 'Laadpaal Maasdam',
-        latitude: 51.787560,
-        longitude: 4.555190
-    }
-];
-
 export default (props: any) => {
+    const [chargers, setChargers] = useState([]);
+
+    useAsyncEffect(async () => {
+       try {
+           const c = await ApiService.wrap<Charger[]>(ApiService.default.chargersAll())
+           console.log(c.data);
+           setChargers(c.data);
+       } catch (e) {
+           Alert.alert('Error', 'Failed to load chargers');
+       }
+    });
+
     return (
         <View style={styles.container}>
             <MapView style={styles.mapStyle}>
-                {locations.map(marker => (
+                {chargers.map(marker => (
                     <Marker
-                        key={marker.id}
-                        coordinate={{ latitude: marker.latitude, longitude: marker.longitude }}
-                        title={marker.title}
+                        key={marker.uuid}
+                        coordinate={{ latitude: parseFloat(marker.latitude), longitude: parseFloat(marker.longitude) }}
+                        title={marker.name}
                     >
                         <MapMarker/>
                     </Marker>
