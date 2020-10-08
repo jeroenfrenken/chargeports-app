@@ -3,7 +3,7 @@ import { ThemeProvider } from 'styled-components/native';
 
 export const defaultTheme = {
     colors: {
-        primary: '#6690f4',
+        primary: '#97d0a3',
         white: '#FFFFFF'
     },
     fonts: [ 'Roboto', 'sans-serif' ],

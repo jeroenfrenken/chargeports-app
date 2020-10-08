@@ -13,4 +13,5 @@ export const MenuButton = styled.TouchableOpacity<{ color?: string }>`
   display: flex;
   justify-content: center;
   align-items: center;
+  box-shadow: 4px 5px 5px #0000003d;
 `;
