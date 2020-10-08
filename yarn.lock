@@ -5165,7 +5165,7 @@ react-native-maps@^0.27.1:
 
 react-native-popup-navigation@jeroenfrenken/react-native-popup-navigation:
   version "0.2.0"
-  resolved "https://codeload.github.com/jeroenfrenken/react-native-popup-navigation/tar.gz/6a390e846e12f9f4305c8107d09249ed2915d79b"
+  resolved "https://codeload.github.com/jeroenfrenken/react-native-popup-navigation/tar.gz/6726cd3fca76e70bf9ed83542e3e51605fd71c22"
 
 react-native-reanimated@^1.13.1:
   version "1.13.1"
