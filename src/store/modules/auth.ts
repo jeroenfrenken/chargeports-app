@@ -19,7 +19,10 @@ export const auth: AuthModel = {
     user: null,
     authenticate: thunk<AuthModel, string, any, StoreModel, void>(async (
         actions,
-        token: string
+        token: string,
+        {
+            getStoreActions
+        }
     ) => {
         const user = await ApiService.authenticate(token);
 
@@ -29,6 +32,7 @@ export const auth: AuthModel = {
 
         actions.setUser(user);
         actions.login(token);
+        getStoreActions().app.setIsLoading(false);
     }),
     login: action<AuthModel>((
         state,

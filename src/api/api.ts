@@ -307,6 +307,53 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
                 options: localVarRequestOptions,
             };
         },
+        /**
+         * 
+         * @param {string} [lat] Lat of the user
+         * @param {string} [_long] Long of user
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        chargersSearch: async (lat?: string, _long?: string, options: any = {}): Promise<RequestArgs> => {
+            const localVarPath = `/api/charger/search`;
+            const localVarUrlObj = globalImportUrl.parse(localVarPath, true);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication apiKey required
+            if (configuration && configuration.apiKey) {
+                const localVarApiKeyValue = typeof configuration.apiKey === 'function'
+                    ? await configuration.apiKey("x-api-key")
+                    : await configuration.apiKey;
+                localVarHeaderParameter["x-api-key"] = localVarApiKeyValue;
+            }
+
+            if (lat !== undefined) {
+                localVarQueryParameter['lat'] = lat;
+            }
+
+            if (_long !== undefined) {
+                localVarQueryParameter['long'] = _long;
+            }
+
+
+    
+            localVarUrlObj.query = {...localVarUrlObj.query, ...localVarQueryParameter, ...options.query};
+            // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
+            delete localVarUrlObj.search;
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: globalImportUrl.format(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
     }
 };
 
@@ -366,6 +413,20 @@ export const DefaultApiFp = function(configuration?: Configuration) {
                 return axios.request(axiosRequestArgs);
             };
         },
+        /**
+         * 
+         * @param {string} [lat] Lat of the user
+         * @param {string} [_long] Long of user
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async chargersSearch(lat?: string, _long?: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<Charger>>> {
+            const localVarAxiosArgs = await DefaultApiAxiosParamCreator(configuration).chargersSearch(lat, _long, options);
+            return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
+                const axiosRequestArgs = {...localVarAxiosArgs.options, url: basePath + localVarAxiosArgs.url};
+                return axios.request(axiosRequestArgs);
+            };
+        },
     }
 };
 
@@ -408,6 +469,16 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
          */
         chargersAll(options?: any): AxiosPromise<Array<Charger>> {
             return DefaultApiFp(configuration).chargersAll(options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {string} [lat] Lat of the user
+         * @param {string} [_long] Long of user
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        chargersSearch(lat?: string, _long?: string, options?: any): AxiosPromise<Array<Charger>> {
+            return DefaultApiFp(configuration).chargersSearch(lat, _long, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -459,6 +530,18 @@ export class DefaultApi extends BaseAPI {
      */
     public chargersAll(options?: any) {
         return DefaultApiFp(this.configuration).chargersAll(options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {string} [lat] Lat of the user
+     * @param {string} [_long] Long of user
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof DefaultApi
+     */
+    public chargersSearch(lat?: string, _long?: string, options?: any) {
+        return DefaultApiFp(this.configuration).chargersSearch(lat, _long, options).then((request) => request(this.axios, this.basePath));
     }
 }
 
