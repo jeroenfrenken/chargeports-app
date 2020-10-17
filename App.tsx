@@ -5,6 +5,7 @@ import store from './src/store/model';
 import { StoreProvider } from 'easy-peasy';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
+import LoadingScreen from './src/ui/components/LoadingScreen';
 import DefaultTheme from './src/ui/theme/DefaultTheme';
 import AuthenticatedScreen from './src/views/authenticated/screens/AuthenticatedScreen';
 import FilterScreen from './src/views/authenticated/screens/FilterScreen';
@@ -29,46 +30,52 @@ const BaseNavigation = ({ children }: { children: React.ReactNode }) => {
 
 const App = () => {
     const isLoggedIn = useStoreState(state => state.auth.isLoggedIn);
+    const isLoading = useStoreState(state => state.app.isLoading);
 
-    if (!isLoggedIn) {
-        return (
-            <BaseNavigation>
-                <Stack.Screen
-                    name="Login"
-                    options={{
-                        headerShown: false
-                    }}
-                    component={LoginScreen}
-                />
-                <Stack.Screen
-                    name="Register"
-                    options={{
-                        headerShown: false
-                    }}
-                    component={RegisterScreen}
-                />
-            </BaseNavigation>
-        );
-    } else {
-        return (
-            <BaseNavigation>
-                <Stack.Screen
-                    name="Authenticated"
-                    options={{
-                        headerShown: false
-                    }}
-                    component={AuthenticatedScreen}
-                />
-                <Stack.Screen
-                    name="FilterScreen"
-                    options={{
-                        headerShown: false
-                    }}
-                    component={FilterScreen}
-                />
-            </BaseNavigation>
-        );
-    }
+    return (
+        <>
+            {isLoading && (
+                <LoadingScreen />
+            )}
+            {!isLoggedIn && (
+                <BaseNavigation>
+                    <Stack.Screen
+                        name="Login"
+                        options={{
+                            headerShown: false
+                        }}
+                        component={LoginScreen}
+                    />
+                    <Stack.Screen
+                        name="Register"
+                        options={{
+                            headerShown: false
+                        }}
+                        component={RegisterScreen}
+                    />
+                </BaseNavigation>
+            )}
+            {isLoggedIn && (
+                <BaseNavigation>
+                    <Stack.Screen
+                        name="Authenticated"
+                        options={{
+                            headerShown: false
+                        }}
+                        component={AuthenticatedScreen}
+                    />
+                    <Stack.Screen
+                        name="FilterScreen"
+                        options={{
+                            headerShown: false
+                        }}
+                        component={FilterScreen}
+                    />
+                </BaseNavigation>
+            )}
+        </>
+
+    );
 };
 
 export default () => (

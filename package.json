@@ -12,14 +12,17 @@
     "easy-peasy": "^3.3.1",
     "expo": "~39.0.0",
     "expo-constants": "~9.2.0",
+    "expo-location": "^9.0.1",
     "expo-status-bar": "^1.0.2",
+    "lottie-ios": "3.1.8",
+    "lottie-react-native": "^3.5.0",
     "react": "~16.13.0",
     "react-dom": "~16.13.0",
     "react-native": "https://github.com/expo/react-native/archive/sdk-39.0.2.tar.gz",
     "react-native-drawer": "^2.5.1",
     "react-native-gesture-handler": "^1.8.0",
     "react-native-maps": "^0.27.1",
-    "react-native-popup-navigation": "^0.2.0",
+    "react-native-popup-navigation": "jeroenfrenken/react-native-popup-navigation",
     "react-native-reanimated": "^1.13.1",
     "react-native-screens": "~2.10.1",
     "react-native-svg": "^12.1.0",
@@ -27,7 +30,8 @@
     "react-native-web": "0.13.13",
     "react-navigation": "^4.4.1",
     "styled-components": "^5.2.0",
-    "url": "^0.11.0"
+    "url": "^0.11.0",
+    "use-async-effect": "^2.2.2"
   },
   "devDependencies": {
     "@babel/core": "7.9.0",

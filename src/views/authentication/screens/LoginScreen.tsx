@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Alert, Text } from 'react-native';
+import { Alert, Keyboard, Text } from 'react-native';
 import { InlineResponse200 } from '../../../api';
 import { ApiService } from '../../../service/ApiService';
 import { useStoreActions } from '../../../store/hooks';
@@ -13,6 +13,7 @@ type Props = StackScreenProps<RootStackParamList, 'Login'>;
 
 export default ({ navigation }: Props) => {
     const loginAction = useStoreActions(state => state.auth.authenticate);
+    const setIsLoading = useStoreActions(state => state.app.setIsLoading);
 
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -22,6 +23,8 @@ export default ({ navigation }: Props) => {
             email.length > 1 &&
             password.length > 1
         ) {
+            Keyboard.dismiss();
+            setIsLoading(true);
             try {
                 const res = await ApiService.wrap<InlineResponse200>(ApiService.default.authenticationLogin({
                     email,
@@ -32,6 +35,7 @@ export default ({ navigation }: Props) => {
                     loginAction(res.data.token);
                 }
             } catch (e) {
+                setIsLoading(false);
                 Alert.alert('Failed', 'Credentials not valid');
             }
         } else {
