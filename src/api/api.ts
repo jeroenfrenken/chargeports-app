@@ -56,6 +56,85 @@ export interface Charger {
      * @memberof Charger
      */
     uuid?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof Charger
+     */
+    addressLine?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof Charger
+     */
+    town?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof Charger
+     */
+    stateOrProvince?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof Charger
+     */
+    postcode?: string;
+    /**
+     * 
+     * @type {Array<ChargerConnection>}
+     * @memberof Charger
+     */
+    chargerConnections?: Array<ChargerConnection>;
+    /**
+     * 
+     * @type {string}
+     * @memberof Charger
+     */
+    distance?: string;
+}
+/**
+ * 
+ * @export
+ * @interface ChargerConnection
+ */
+export interface ChargerConnection {
+    /**
+     * 
+     * @type {number}
+     * @memberof ChargerConnection
+     */
+    connectionTypeId?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof ChargerConnection
+     */
+    statusTypeId?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof ChargerConnection
+     */
+    levelId?: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof ChargerConnection
+     */
+    powerKw?: string;
+    /**
+     * 
+     * @type {number}
+     * @memberof ChargerConnection
+     */
+    currentTypeId?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof ChargerConnection
+     */
+    quantity?: number;
 }
 /**
  * 
