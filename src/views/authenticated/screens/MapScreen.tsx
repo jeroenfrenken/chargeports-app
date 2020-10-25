@@ -1,10 +1,12 @@
+import Axios from 'axios';
 import * as Location from 'expo-location';
-import React, { useState } from 'react';
-import { Callout, Marker, PROVIDER_GOOGLE } from 'react-native-maps';
-import MapView from "react-native-map-clustering";
+import React, { useRef, useState } from 'react';
+import { Callout, Marker, Polyline, PROVIDER_GOOGLE } from 'react-native-maps';
+import MapView from 'react-native-map-clustering';
+import Constants from 'expo-constants';
 import useAsyncEffect from 'use-async-effect';
-import MapStyle from '../../../assets/maps/MapStyle.json';
 import { Charger } from '../../../api';
+import { decode } from '../../../util/HerePolyline';
 // @ts-ignore
 import MenuBarIcon from '../../../assets/icons/MenuIcon.svg';
 // @ts-ignore
@@ -12,11 +14,13 @@ import LocationIcon from '../../../assets/icons/LocationIcon.svg';
 // @ts-ignore
 import FilterIcon from '../../../assets/icons/FilterIcon.svg';
 import { StyleSheet, View, Dimensions, SafeAreaView, Keyboard, InteractionManager, Alert } from 'react-native';
+import { UberMapStyle } from '../../../assets/maps/MapStyle';
 import { ApiService } from '../../../service/ApiService';
 import MapInput from '../../../ui/components/MapInput';
 import { MenuButton } from '../../../ui/components/MenuButton';
 import { RoundedButton } from '../../../ui/components/RoundedButton';
 import DefaultTheme, { defaultTheme } from '../../../ui/theme/DefaultTheme';
+import AnimatedPolyline from '../components/AnimatedPolyline';
 import ChargerOverlay from '../components/ChargerOverlay';
 import MapMarker from '../components/MapMarker';
 
@@ -59,7 +63,8 @@ const styles = StyleSheet.create({
 });
 
 export default (props: any) => {
-    const [map, setMap] = useState(null);
+    const mapRef = useRef();
+    const [coords, setCoords] = useState([]);
     const [chargers, setChargers] = useState([]);
     const [mapSearch, setMapSearch] = useState('');
     const [location, setLocation] = useState({ coords: { latitude: 51.2608984, longitude: 5.6907774 } });
@@ -90,44 +95,75 @@ export default (props: any) => {
     }
 
     async function updateMapLocation() {
-        let location = await Location.getCurrentPositionAsync({});
-        setLocation(location);
+        let currentLocation = await Location.getCurrentPositionAsync({});
+        setLocation(currentLocation);
 
-        if ( map !== null ) {
-            map.animateToRegion({
-                latitude: location.coords.latitude,
-                longitude: location.coords.longitude,
-                latitudeDelta: 0.0922,
-                longitudeDelta: 0.0421
-            });
-        }
+        if ( mapRef.current === undefined ) return null;
+
+        mapRef.current.animateToRegion({
+            latitude: currentLocation.coords.latitude,
+            longitude: currentLocation.coords.longitude,
+            latitudeDelta: 0.0922,
+            longitudeDelta: 0.0421
+        });
     }
 
-    function showChargerOverView(charger: Charger) {
-        if ( map !== null ) {
-            map.animateToRegion({
-                latitude: parseFloat(charger.latitude),
-                longitude: parseFloat(charger.longitude),
-                latitudeDelta: 0.00922,
-                longitudeDelta: 0.00421
-            });
-        }
+    async function showChargerOverView(charger: Charger) {
+        // try {
+        //     const route = await Axios.get(`https://router.hereapi.com/v8/routes?transportMode=car&origin=${location.coords.latitude},${location.coords.longitude}&destination=${parseFloat(charger.latitude)},${parseFloat(charger.longitude)}&apiKey=${Constants.manifest.extra.hereApiKey}&return=polyline`);
+        //
+        //     if (route.data.routes.length) {
+        //         const coords = decode(route.data.routes[0].sections[0].polyline);
+        //         const formattedCoords = [];
+        //
+        //         coords.polyline.forEach((val) => {
+        //             formattedCoords.push({
+        //                 latitude: val[ 0 ],
+        //                 longitude: val[ 1 ]
+        //             });
+        //         });
+        //         setCoords(formattedCoords)
+        //     }
+        // } catch (e) {
+        //     console.log(e);
+        // }
+
+        if ( mapRef.current === undefined ) return null;
+
+        // mapRef.current.fitToCoordinates(
+        //     {
+        //         latitude: parseFloat(charger.latitude),
+        //         longitude: parseFloat(charger.longitude),
+        //         latitudeDelta: 0.00922,
+        //         longitudeDelta: 0.00421
+        //     });
+
+        // mapRef.current.fitToCoordinates([
+        //     {
+        //         latitude: parseFloat(charger.latitude),
+        //         longitude: parseFloat(charger.longitude),
+        //     },
+        //     {
+        //         latitude: location.coords.latitude,
+        //         longitude: location.coords.longitude
+        //     }
+        // ], {
+        //     edgePadding: { top: 100, right: 100, bottom: 120, left: 100 },
+        //     animated: true
+        // });
     }
 
     const INITIAL_REGION = {
         latitude: 51.3,
         longitude: 5.6907774,
         latitudeDelta: 8.5,
-        longitudeDelta: 8.5,
+        longitudeDelta: 8.5
     };
-
 
     return (
         <View style={styles.container}>
             <MapView
-                ref={ref => {
-                    setMap(ref);
-                }}
+                ref={mapRef}
                 clusterColor={defaultTheme.colors.primary}
                 style={styles.mapStyle}
                 showsUserLocation={true}
@@ -135,25 +171,37 @@ export default (props: any) => {
                 radius={75}
                 provider={PROVIDER_GOOGLE}
                 maxZoom={10}
-                // customMapStyle={MapStyle}
-                onPress={() => {
-                    // props.dismiss();
-                }}
+                customMapStyle={UberMapStyle}
             >
                 {chargers.map(charger => (
                     <Marker
                         key={charger.uuid}
-                        coordinate={{ latitude: parseFloat(charger.latitude), longitude: parseFloat(charger.longitude) }}
-                        onPress={() => showChargerOverView(charger)}
+                        coordinate={{
+                            latitude: parseFloat(charger.latitude),
+                            longitude: parseFloat(charger.longitude)
+                        }}
+                        onPress={async () => await showChargerOverView(charger)}
                     >
                         <MapMarker/>
                         <Callout
                             tooltip={true}
                         >
-                            <ChargerOverlay charger={charger} />
+                            <ChargerOverlay
+                                charger={charger}
+                                openReservationScreen={() => {
+                                    console.log('called');
+                                    props.present('ChargerOverview', {
+                                        charger
+                                    });
+                                }}
+                            />
                         </Callout>
                     </Marker>
                 ))}
+                {
+                    coords.length > 0 && (<Polyline coordinates={coords} strokeWidth={4} strokeColor={defaultTheme.colors.primary} />)
+                }
+
             </MapView>
             <SafeAreaView
                 style={styles.topBarContainer}

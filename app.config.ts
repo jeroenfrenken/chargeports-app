@@ -42,6 +42,7 @@ export default {
     },
     description: '',
     extra: {
-        apiUrl: process.env.EXPO_API_BASE_URL || 'http://localhost'
+        apiUrl: process.env.EXPO_API_BASE_URL || 'http://localhost',
+        hereApiKey: process.env.HERE_API_KEY || '1234',
     }
 };

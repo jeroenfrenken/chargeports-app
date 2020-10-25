@@ -4,10 +4,10 @@ import { TouchableOpacityProps } from 'react-native';
 
 export const NormalButtonContainer = styled.TouchableOpacity<{ color?: string }>`
   background: ${props => props.color || props.theme.colors.primary};
-  padding: 10px;
+  padding: 5px;
   border-radius: 2px;
   width: 100%;
-  min-height: 60px;
+  min-height: 40px;
   
   display: flex;
   justify-content: center;
@@ -28,7 +28,7 @@ export interface FilledButtonProps extends TouchableOpacityProps {
 
 export default (props: FilledButtonProps) => {
     return (
-        <NormalButtonContainer onClick={() => ''} {...props}>
+        <NormalButtonContainer {...props}>
             {props.children ?
                 props.children : (
                     <NormalButtonLabel>
