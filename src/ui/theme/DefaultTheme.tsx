@@ -4,6 +4,7 @@ import { ThemeProvider } from 'styled-components/native';
 export const defaultTheme = {
     colors: {
         primary: '#97D0A3',
+        secondary: '#2b3247',
         white: '#FFFFFF'
     },
     fonts: [ 'Roboto', 'sans-serif' ],

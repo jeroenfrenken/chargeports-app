@@ -5,7 +5,7 @@ import { TouchableOpacityProps } from 'react-native';
 export const NormalButtonContainer = styled.TouchableOpacity<{ color?: string }>`
   background: ${props => props.color || props.theme.colors.primary};
   padding: 10px;
-  border-radius: 10px;
+  border-radius: 2px;
   width: 100%;
   min-height: 60px;
   

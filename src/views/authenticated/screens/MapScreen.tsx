@@ -1,7 +1,9 @@
 import * as Location from 'expo-location';
 import React, { useState } from 'react';
-import MapView, { Marker } from 'react-native-maps';
+import { Callout, Marker, PROVIDER_GOOGLE } from 'react-native-maps';
+import MapView from "react-native-map-clustering";
 import useAsyncEffect from 'use-async-effect';
+import MapStyle from '../../../assets/maps/MapStyle.json';
 import { Charger } from '../../../api';
 // @ts-ignore
 import MenuBarIcon from '../../../assets/icons/MenuIcon.svg';
@@ -14,6 +16,8 @@ import { ApiService } from '../../../service/ApiService';
 import MapInput from '../../../ui/components/MapInput';
 import { MenuButton } from '../../../ui/components/MenuButton';
 import { RoundedButton } from '../../../ui/components/RoundedButton';
+import DefaultTheme, { defaultTheme } from '../../../ui/theme/DefaultTheme';
+import ChargerOverlay from '../components/ChargerOverlay';
 import MapMarker from '../components/MapMarker';
 
 const styles = StyleSheet.create({
@@ -100,10 +104,6 @@ export default (props: any) => {
     }
 
     function showChargerOverView(charger: Charger) {
-        props.present('ChargerOverview', {
-            charger
-        });
-
         if ( map !== null ) {
             map.animateToRegion({
                 latitude: parseFloat(charger.latitude),
@@ -114,14 +114,28 @@ export default (props: any) => {
         }
     }
 
+    const INITIAL_REGION = {
+        latitude: 51.3,
+        longitude: 5.6907774,
+        latitudeDelta: 8.5,
+        longitudeDelta: 8.5,
+    };
+
+
     return (
         <View style={styles.container}>
             <MapView
                 ref={ref => {
                     setMap(ref);
                 }}
+                clusterColor={defaultTheme.colors.primary}
                 style={styles.mapStyle}
                 showsUserLocation={true}
+                initialRegion={INITIAL_REGION}
+                radius={75}
+                provider={PROVIDER_GOOGLE}
+                maxZoom={10}
+                // customMapStyle={MapStyle}
                 onPress={() => {
                     // props.dismiss();
                 }}
@@ -133,6 +147,11 @@ export default (props: any) => {
                         onPress={() => showChargerOverView(charger)}
                     >
                         <MapMarker/>
+                        <Callout
+                            tooltip={true}
+                        >
+                            <ChargerOverlay charger={charger} />
+                        </Callout>
                     </Marker>
                 ))}
             </MapView>

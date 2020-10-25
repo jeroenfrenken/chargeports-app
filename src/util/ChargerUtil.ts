@@ -93,7 +93,7 @@ export class ChargerUtil {
             case 1036:
                 return "Type 2 (Tethered Connector)";
             case 25:
-                return "Type 2 (Socket Only)";
+                return "Type 2";
         }
 
         return "Unknown"

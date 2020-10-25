@@ -4,6 +4,19 @@ import { Charger } from '../../../api';
 import NormalButton from '../../../ui/components/NormalButton';
 import { defaultTheme } from '../../../ui/theme/DefaultTheme';
 import { ChargerUtil } from '../../../util/ChargerUtil';
+import styled from 'styled-components/native';
+// @ts-ignore
+import ChademoIcon from '../../../assets/icons/Chademo.svg';
+
+const Tile = styled.TextInput`
+    background: #f4f4f4;
+    height: 50px;
+    width: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+`;
 
 const styles = StyleSheet.create({
     container: {
@@ -14,7 +27,7 @@ const styles = StyleSheet.create({
     },
     title: {
         fontSize: 19,
-        fontWeight: "bold",
+        fontWeight: 'bold'
     }
 });
 
@@ -23,10 +36,10 @@ export function ChargerOverview(props: {
 }) {
     return (
         <View style={styles.container}>
-            <Text style={styles.title}>{ props.charger.name }</Text>
-            {props.charger.name !== props.charger.addressLine && (<Text>{ props.charger.addressLine }</Text>)}
-            <Text>{props.charger.postcode !== "" && (props.charger.postcode + " ")}{props.charger.town}</Text>
-            {/*<Text>{props.charger.distance}KM</Text>*/}
+            <Text style={styles.title}>{props.charger.name}</Text>
+            {props.charger.name !== props.charger.addressLine && (<Text>{props.charger.addressLine}</Text>)}
+            <Text>{props.charger.postcode !== '' && (props.charger.postcode + ' ')}{props.charger.town}</Text>
+            <Text>{props.charger.distance}KM</Text>
             {props.charger.chargerConnections.map(connection => <Text>{ChargerUtil.parseConnectionType(connection.connectionTypeId)} {connection.quantity} {ChargerUtil.parseCurrentType(connection.currentTypeId)} {connection.powerKw}KwH</Text>)}
             <NormalButton
                 style={{
