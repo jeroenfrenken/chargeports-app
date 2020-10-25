@@ -34,6 +34,9 @@ const styles = StyleSheet.create({
         position: 'absolute',
         top: Dimensions.get('window').height - 120,
         width: '100%'
+    },
+    logoutButton: {
+
     }
 });
 
@@ -50,12 +53,13 @@ export function SideBar(props) {
             </View>
             <DrawerItemList {...props} />
             <View style={ styles.logout }>
-                <Button onPress={() => props.logout()} title="Uitloggen" style={{color: defaultTheme.colors.black}}/>
+                <Button onPress={() => props.logout()} title="Uitloggen" color={defaultTheme.colors.black}/>
                 <Text style={{
                     textAlign: "center",
                     fontSize: 12,
                     fontWeight: "300",
-                    opacity: 0.4
+                    opacity: 0.4,
+                    marginTop: 5
                 }}>{ Constants.manifest.name } { Constants.manifest.version }</Text>
             </View>
         </DrawerContentScrollView>
