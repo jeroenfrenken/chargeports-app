@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { Dimensions, StyleSheet, Text, View } from 'react-native';
+import { CalloutSubview } from 'react-native-maps';
 import { Charger } from '../../../api';
 import NormalButton from '../../../ui/components/NormalButton';
 import { defaultTheme } from '../../../ui/theme/DefaultTheme';
@@ -89,13 +90,15 @@ export default (props: {
                     <Text style={styles.detailText}>{props.charger.chargerConnections[0].powerKw} kW</Text>
                 </View>
             </View>
-            <NormalButton
-                text={'Reserveer'}
+            <CalloutSubview
                 onPress={() => {
-                    console.log('ja');
-                    // props.openReservationScreen();
+                    props.openReservationScreen();
                 }}
-            />
+            >
+                <NormalButton
+                    text={'Reserveer'}
+                />
+            </CalloutSubview>
         </View>
         <View style={styles.triangle}/>
     </View>

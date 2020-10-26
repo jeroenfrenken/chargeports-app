@@ -189,7 +189,6 @@ export default (props: any) => {
                             <ChargerOverlay
                                 charger={charger}
                                 openReservationScreen={() => {
-                                    console.log('called');
                                     props.present('ChargerOverview', {
                                         charger
                                     });
