@@ -34,9 +34,6 @@ const styles = StyleSheet.create({
         position: 'absolute',
         top: Dimensions.get('window').height - 120,
         width: '100%'
-    },
-    logoutButton: {
-
     }
 });
 
