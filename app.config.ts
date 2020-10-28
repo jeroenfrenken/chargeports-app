@@ -1,7 +1,7 @@
 require('dotenv').config();
 
 export default {
-    name: 'Charegeports-App',
+    name: 'ChargePorts App',
     slug: 'Chargeports-App',
     version: '1.0.0',
     orientation: 'portrait',
