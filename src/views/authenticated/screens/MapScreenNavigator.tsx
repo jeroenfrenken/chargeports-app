@@ -7,8 +7,6 @@ import MapScreen from './MapScreen';
 
 const { height } = Dimensions.get('window');
 
-console.log(height - 250);
-
 export default (props) => {
     return (
         <Navigator pages={[
