@@ -25,7 +25,7 @@ const styles = StyleSheet.create({
         paddingBottom: 15,
         fontWeight: 'bold',
         textAlign: 'center',
-        color: defaultTheme.colors.primary
+        color: defaultTheme.colors.black
     },
     location: {
         paddingTop: 10,

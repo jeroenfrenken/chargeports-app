@@ -65,6 +65,7 @@ const styles = StyleSheet.create({
 export default (props: any) => {
     const mapRef = useRef();
     const [coords, setCoords] = useState([]);
+    const [markersRef, setMarkersRef] = useState([]);
     const [chargers, setChargers] = useState([]);
     const [mapSearch, setMapSearch] = useState('');
     const [location, setLocation] = useState({ coords: { latitude: 51.2608984, longitude: 5.6907774 } });
@@ -75,8 +76,8 @@ export default (props: any) => {
             Alert.alert('Error', 'Permission to access location was denied');
         }
 
-        // await updateMapLocation();
-    });
+        await updateMapLocation();
+    }, []);
 
     useAsyncEffect(async () => {
         await loadNewChargers(location.coords.latitude.toString(), location.coords.longitude.toString());
@@ -109,48 +110,55 @@ export default (props: any) => {
     }
 
     async function showChargerOverView(charger: Charger) {
-        // try {
-        //     const route = await Axios.get(`https://router.hereapi.com/v8/routes?transportMode=car&origin=${location.coords.latitude},${location.coords.longitude}&destination=${parseFloat(charger.latitude)},${parseFloat(charger.longitude)}&apiKey=${Constants.manifest.extra.hereApiKey}&return=polyline`);
-        //
-        //     if (route.data.routes.length) {
-        //         const coords = decode(route.data.routes[0].sections[0].polyline);
-        //         const formattedCoords = [];
-        //
-        //         coords.polyline.forEach((val) => {
-        //             formattedCoords.push({
-        //                 latitude: val[ 0 ],
-        //                 longitude: val[ 1 ]
-        //             });
-        //         });
-        //         setCoords(formattedCoords)
-        //     }
-        // } catch (e) {
-        //     console.log(e);
-        // }
+        setCoords([])
+        if ( mapRef.current === undefined ) return null;
+
+        mapRef.current.animateToRegion(
+            {
+                latitude: parseFloat(charger.latitude),
+                longitude: parseFloat(charger.longitude),
+                latitudeDelta: 0.00922,
+                longitudeDelta: 0.00421
+            });
+    }
+
+    async function drawRoute(charger: Charger) {
+        try {
+            const route = await Axios.get(`https://router.hereapi.com/v8/routes?transportMode=car&origin=${location.coords.latitude},${location.coords.longitude}&destination=${parseFloat(charger.latitude)},${parseFloat(charger.longitude)}&apiKey=${Constants.manifest.extra.hereApiKey}&return=polyline`);
+
+            console.log(route);
+
+            if (route.data.routes.length) {
+                const coords = decode(route.data.routes[0].sections[0].polyline);
+                const formattedCoords = [];
+
+                coords.polyline.forEach((val) => {
+                    formattedCoords.push({
+                        latitude: val[ 0 ],
+                        longitude: val[ 1 ]
+                    });
+                });
+                setCoords(formattedCoords)
+            }
+        } catch (e) {
+            console.log(e);
+        }
 
         if ( mapRef.current === undefined ) return null;
 
-        // mapRef.current.fitToCoordinates(
-        //     {
-        //         latitude: parseFloat(charger.latitude),
-        //         longitude: parseFloat(charger.longitude),
-        //         latitudeDelta: 0.00922,
-        //         longitudeDelta: 0.00421
-        //     });
-
-        // mapRef.current.fitToCoordinates([
-        //     {
-        //         latitude: parseFloat(charger.latitude),
-        //         longitude: parseFloat(charger.longitude),
-        //     },
-        //     {
-        //         latitude: location.coords.latitude,
-        //         longitude: location.coords.longitude
-        //     }
-        // ], {
-        //     edgePadding: { top: 100, right: 100, bottom: 120, left: 100 },
-        //     animated: true
-        // });
+        mapRef.current.fitToCoordinates([
+            {
+                latitude: parseFloat(charger.latitude),
+                longitude: parseFloat(charger.longitude),
+            },
+            {
+                latitude: location.coords.latitude,
+                longitude: location.coords.longitude
+            }
+        ], {
+            edgePadding: { top: 100, right: 100, bottom: 120, left: 100 },
+            animated: true
+        });
     }
 
     const INITIAL_REGION = {
@@ -175,12 +183,22 @@ export default (props: any) => {
             >
                 {chargers.map(charger => (
                     <Marker
+                        ref={ref => {
+                            markersRef[charger.uuid] = ref;
+                            setMarkersRef(markersRef)
+                        }}
                         key={charger.uuid}
+                        identifier={charger.uuid}
                         coordinate={{
                             latitude: parseFloat(charger.latitude),
                             longitude: parseFloat(charger.longitude)
                         }}
                         onPress={async () => await showChargerOverView(charger)}
+                        onDeselect={() => {
+                            console.log('deselect');
+
+                            props.dismiss();
+                        }}
                     >
                         <MapMarker/>
                         <Callout
@@ -190,7 +208,12 @@ export default (props: any) => {
                                 charger={charger}
                                 openReservationScreen={() => {
                                     props.present('ChargerOverview', {
-                                        charger
+                                        charger,
+                                        onConfirm: async () => {
+                                            markersRef[charger.uuid].hideCallout();
+                                            props.dismiss();
+                                            await drawRoute(charger);
+                                        }
                                     });
                                 }}
                             />
@@ -198,7 +221,10 @@ export default (props: any) => {
                     </Marker>
                 ))}
                 {
-                    coords.length > 0 && (<Polyline coordinates={coords} strokeWidth={4} strokeColor={defaultTheme.colors.primary} />)
+                    coords.length > 0 && (
+                        <>
+                            <Polyline coordinates={coords} strokeWidth={4} strokeColor={defaultTheme.colors.primary} />
+                        </>)
                 }
 
             </MapView>

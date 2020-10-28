@@ -1,9 +1,13 @@
+import LottieView from "lottie-react-native";
 import moment from 'moment';
 import React, { useEffect, useState } from 'react';
+// @ts-ignore
+import Down from '../../../assets/icons/Down.svg';
 import { Dimensions, StyleSheet, Text, View } from 'react-native';
 import { Charger } from '../../../api';
-import RNPickerSelect from 'react-native-picker-select';
+import LargeButton from '../../../ui/components/LargeButton';
 import { defaultTheme } from '../../../ui/theme/DefaultTheme';
+import DateTimePickerModal from 'react-native-modal-datetime-picker';
 
 const styles = StyleSheet.create({
     wrapper: {
@@ -13,66 +17,149 @@ const styles = StyleSheet.create({
         padding: 15
     },
     title: {
-        fontSize: 19,
-        fontWeight: 'bold'
+        fontSize: 24,
+        paddingBottom: 15,
+        fontWeight: 'bold',
+        textAlign: 'center',
+        color: defaultTheme.colors.black
     },
-    container: {
+    subTitle: {
+        fontSize: 15,
+        paddingBottom: 5,
+        fontWeight: 'bold',
+    },
+    datePicker: {
         flex: 1,
         flexDirection: 'row',
-        justifyContent: 'space-around'
+        paddingBottom: 60
     },
-    containerItemLarge: {
-        flex: 2
+    datePickerInput: {
+        flex: 5,
+        padding: 10,
+        height: 40,
+        backgroundColor: '#f4f4f4',
+        justifyContent: 'flex-start'
     },
-    containerItemSmall: {
-        flex: 1
+    datePickerDown: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        height: 40,
+        backgroundColor: defaultTheme.colors.primary
     }
 });
 
 export function ChargerOverview(props: {
-    charger: Charger
+    charger: Charger,
+    onConfirm: Function
 }) {
-    const [activeDate, setActiveDate] = useState(null);
-    const [dates, setDates] = useState([]);
+    const now = moment();
+    const max = moment().add(7, 'days');
+
+    const [isLoading, setLoading] = useState(false);
+    const [startDate, setStartDate] = useState(moment());
+    const [leaveDate, setLeaveDate] = useState(moment().add(1, 'hour'));
+    const [isDatePickerVisible, setDatePickerVisible] = useState(false);
+    const [isLeaveDatePickerVisible, setLeaveDatePickerVisible] = useState(false);
+
+
+    async function confirmReservation() {
+        setLoading(true);
+
+        // await props.onConfirm();
+    }
 
     useEffect(() => {
-        const days = [];
-
-        for (let i = 0; i < 7; i++) {
-            const date = moment();
-            date.add(i, 'days');
-            days.push({
-                label: date.format('ddd DD MMM'),
-                value: date.format('DD-MM-YYYY')
-            });
-        }
-
-        console.log(days);
-
-        setDates(days);
-        setActiveDate(days[0].value);
     }, []);
 
     return (
         <View style={styles.wrapper}>
-            <Text>{props.charger.name}</Text>
-            <View style={styles.container}>
-                <View style={styles.containerItemLarge}>
-                    <RNPickerSelect
-                        onValueChange={(val) => setActiveDate(val)}
-                        items={dates}
-                        placeholder={'Selecteer een datum'}
-                        style={{}}
-                        value={activeDate}
+            {isLoading && (
+                <View style={{
+                    flex: 1,
+                    alignItems: "center"
+                }}>
+                    <LottieView
+                        style={{
+                            height: 300,
+                        }}
+                        source={require('../../../assets/lottie/charger_loading.json')}
+                        autoPlay
+                        loop
                     />
                 </View>
-                <View style={styles.containerItemSmall}>
-                    <Text>Test</Text>
-                </View>
-                <View style={styles.containerItemLarge}>
-                    <Text>2</Text>
-                </View>
-            </View>
+            )}
+
+            {!isLoading && (
+                <>
+                    <Text style={styles.title}>{props.charger.name}</Text>
+                    <View>
+                        <Text style={styles.subTitle}>Aankomst</Text>
+                        <View style={styles.datePicker} onStartShouldSetResponder={() => {
+                            setDatePickerVisible(true);
+                        }}>
+                            <Text style={styles.datePickerInput}>{startDate.format('ddd DD MMMM YYYY H:mm')}</Text>
+                            <View style={styles.datePickerDown}>
+                                <Down width={30} />
+                            </View>
+                        </View>
+                    </View>
+                    <View>
+                        <Text style={styles.subTitle}>Vertrek</Text>
+                        <View style={styles.datePicker} onStartShouldSetResponder={() => {
+                            setLeaveDatePickerVisible(true);
+                        }}>
+                            <Text style={styles.datePickerInput}>{leaveDate.format('ddd DD MMMM YYYY H:mm')}</Text>
+                            <View style={styles.datePickerDown}>
+                                <Down width={30} />
+                            </View>
+                        </View>
+                    </View>
+                    <View>
+                        <LargeButton
+                            text={"Bevestig reservering"}
+                            style={{
+                                marginTop: 20,
+                            }}
+                            onPress={async () => {
+                                await confirmReservation();
+                            }}
+                        />
+                    </View>
+                    <DateTimePickerModal
+                        isVisible={isDatePickerVisible}
+                        mode="datetime"
+                        headerTextIOS="Selecteer aankomst tijd"
+                        date={startDate.toDate()}
+                        minimumDate={now.toDate()}
+                        maximumDate={max.toDate()}
+                        isDarkModeEnabled={false}
+                        onConfirm={(date) => {
+                            setStartDate(moment(date));
+                            setDatePickerVisible(false);
+                        }}
+                        onCancel={() => {
+                            setDatePickerVisible(false);
+                        }}
+                    />
+                    <DateTimePickerModal
+                        isVisible={isLeaveDatePickerVisible}
+                        mode="datetime"
+                        headerTextIOS="Selecteer vertrektijd"
+                        date={leaveDate.toDate()}
+                        minimumDate={startDate.toDate()}
+                        maximumDate={max.toDate()}
+                        isDarkModeEnabled={false}
+                        onConfirm={(date) => {
+                            setLeaveDate(moment(date));
+                            setLeaveDatePickerVisible(false);
+                        }}
+                        onCancel={() => {
+                            setLeaveDatePickerVisible(false);
+                        }}
+                    />
+                </>
+            )}
         </View>
     );
 }

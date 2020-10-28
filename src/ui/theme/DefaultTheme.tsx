@@ -5,7 +5,8 @@ export const defaultTheme = {
     colors: {
         primary: '#86d29f',
         secondary: '#2b3247',
-        white: '#FFFFFF'
+        white: '#FFFFFF',
+        black: '#000000'
     },
     fonts: [ 'Roboto', 'sans-serif' ],
     fontSizes: {

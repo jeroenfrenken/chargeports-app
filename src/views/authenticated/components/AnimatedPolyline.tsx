@@ -8,7 +8,7 @@ export default (props) => {
     useEffect(() => {
         setPolyLine(props.coords);
         animatePolyline();
-    });
+    }, []);
 
     function animatePolyline() {
         if (interVal !== null) return;
