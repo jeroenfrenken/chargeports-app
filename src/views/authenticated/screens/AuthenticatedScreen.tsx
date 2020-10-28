@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { useStoreActions } from '../../../store/hooks';
+import { defaultTheme } from '../../../ui/theme/DefaultTheme';
 import { SideBar } from '../components/SideBar';
 // @ts-ignore
 import MapIcon from "../../../assets/icons/MapIcon.svg";
@@ -30,7 +31,7 @@ export default function AuthenticatedScreen() {
                 options={{
                     title: 'Map',
                     drawerIcon: ({focused, size}) => (
-                        <MapIcon />
+                        <MapIcon width={size} />
                     ),
                 }}
             />
@@ -40,7 +41,7 @@ export default function AuthenticatedScreen() {
                 options={{
                     title: 'Vorige laadbeurten',
                     drawerIcon: ({focused, size}) => (
-                        <Previous />
+                        <Previous width={size} />
                     ),
                 }}
             />
@@ -50,7 +51,7 @@ export default function AuthenticatedScreen() {
                 options={{
                     title: 'Aankomende laadbeurten',
                     drawerIcon: ({focused, size}) => (
-                        <Upcomming />
+                        <Upcomming width={size} />
                     ),
                 }}
             />
@@ -60,7 +61,7 @@ export default function AuthenticatedScreen() {
                 options={{
                     title: 'Instellingen',
                     drawerIcon: ({focused, size}) => (
-                        <Settings />
+                        <Settings width={size}/>
                     ),
                 }}
             />
