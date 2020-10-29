@@ -4,6 +4,7 @@ import { defaultTheme } from '../../../ui/theme/DefaultTheme';
 import {MenuButton} from "../../../ui/components/MenuButton";
 // @ts-ignore
 import MenuBarIcon from "../../../assets/icons/MenuIcon.svg";
+import PreviousCharge from "../components/PreviousCharge";
 // @ts-ignore
 import Previous from "../../../assets/icons/Previous.svg";
 
@@ -15,7 +16,7 @@ const styles = StyleSheet.create({
     },
     topBarContainer: {
         flex: 1,
-        top: 30,
+        top: 60,
         height: 50,
         width: '90%',
         left: '5%',
@@ -25,68 +26,38 @@ const styles = StyleSheet.create({
     menuButton: {
         marginTop: 0
     },
-    title: {
-        fontSize: 26
-    },
-    list: {
-        paddingTop: 100,
-        paddingBottom: 200,
-        padding: 20
-    },
-    chargeWrap: {
+    titleWrap: {
+        backgroundColor: defaultTheme.colors.white,
+        height: 45,
+        padding: 10,
+        borderRadius: 5,
         shadowColor: defaultTheme.colors.black,
         shadowOffset: {width: 5, height: 5},
         shadowRadius: 20,
         shadowOpacity: 0.1,
-        borderRadius: 20,
-        backgroundColor: defaultTheme.colors.white,
-        width: '100%',
-        padding: 20,
-        marginBottom: 20,
     },
-    previousWrap: {
-        padding: 5,
-        borderRadius: 5,
-        width: 30,
+    title: {
+        fontSize: 20,
         height: 30,
-        backgroundColor: '#97d0a352',
+        fontWeight: '600'
+    },
+    icon: {
         marginRight: 10
     },
-    euroWrap: {
-        padding: 5,
-        paddingLeft: 8,
-        borderRadius: 5,
-        width: 30,
-        height: 30,
-        backgroundColor: '#673ab747',
-        marginRight: 10
+    list: {
+        paddingLeft: 20,
+        paddingRight: 20,
+        overflow: 'visible'
     },
-    euro: {
-        fontSize: 18
-    },
-    time: {
-        fontWeight: "600",
-        marginTop: 8
-    },
-    infoLine: {
-        display: 'flex',
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-    },
-    infoLineMain: {
-        display: 'flex',
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        marginTop: 20
-    },
-    infoLineRight: {
-        display: 'flex',
-        flexDirection: 'row',
+    listWrap: {
+        paddingTop: 150,
+        backgroundColor: 'transparent'
     }
 });
 
 const PreviousCharges = [
     {
+        id: 1,
         date: '20-10-2020',
         title: 'AH Eindhoven',
         address: 'Groeneweg 12',
@@ -96,6 +67,7 @@ const PreviousCharges = [
         price: '20,50',
     },
     {
+        id: 2,
         date: '19-10-2020',
         title: 'AH Eindhoven',
         address: 'Groeneweg 12',
@@ -105,6 +77,7 @@ const PreviousCharges = [
         price: '30,50',
     },
     {
+        id: 3,
         date: '18-10-2020',
         title: 'Strijen',
         address: 'Rietgansstraat 1',
@@ -114,6 +87,7 @@ const PreviousCharges = [
         price: '30,50',
     },
     {
+        id: 4,
         date: '17-10-2020',
         title: 'Weert',
         address: 'Rentemeesterlaan 13',
@@ -123,6 +97,7 @@ const PreviousCharges = [
         price: '69,50',
     },
     {
+        id: 5,
         date: '18-10-2020',
         title: 'Strijen',
         address: 'Rietgansstraat 1',
@@ -136,41 +111,13 @@ const PreviousCharges = [
 export default function PreviousChargesScreen(props: any) {
     return (
         <View style={styles.container}>
-            <ScrollView style={styles.list}>
-                { PreviousCharges.map((charge) =>
-                    <View style={styles.chargeWrap}>
-                        <Text>{charge.date}</Text>
-                        <View style={styles.infoLineMain}>
-                            <View>
-                                <Text style={{fontSize: 20, fontWeight: '600'}}>{ charge.title }</Text>
-                                <Text>{ charge.address }</Text>
-                            </View>
-                            <View>
-                                <Text style={{fontSize: 20, fontWeight: '600'}}>{ charge.kWh } kWh</Text>
-                                <Text style={{textAlign: 'right'}}>totaal</Text>
-                            </View>
-                        </View>
-                        <View style={styles.infoLineMain}>
-                            <View style={styles.infoLine}>
-                                <View style={styles.previousWrap}>
-                                    <Previous style={{ width: 8, height: 8}}/>
-                                </View>
-                                <View style={styles.infoLine}>
-                                    <Text style={styles.time}>{ charge.timeStart }</Text>
-                                    <Text style={{ marginTop: 8, marginLeft: 5, marginRight: 5}}>tot</Text>
-                                    <Text style={styles.time}>{ charge.timeEnd }</Text>
-                                </View>
-                            </View>
-                            <View style={styles.infoLineRight}>
-                                <View style={styles.euroWrap}>
-                                    <Text style={styles.euro}>&euro;</Text>
-                                </View>
-                                <Text style={{marginTop: 8}}>{ charge.price }</Text>
-                            </View>
-                        </View>
-                    </View>
-                ) }
-            </ScrollView>
+            <View style={styles.listWrap}>
+                <ScrollView style={styles.list}>
+                    { PreviousCharges.map((charge) =>
+                        <PreviousCharge charge={charge} key={charge.id}/>
+                    ) }
+                </ScrollView>
+            </View>
             <SafeAreaView
                 style={styles.topBarContainer}>
                 <MenuButton
@@ -180,7 +127,9 @@ export default function PreviousChargesScreen(props: any) {
                     }}>
                     <MenuBarIcon/>
                 </MenuButton>
-                <Text style={styles.title}>Vorige laadbeurten</Text>
+                <View style={styles.titleWrap}>
+                    <Text style={styles.title}><Previous style={styles.icon}/> Vorige laadbeurten</Text>
+                </View>
             </SafeAreaView>
         </View>
     );
