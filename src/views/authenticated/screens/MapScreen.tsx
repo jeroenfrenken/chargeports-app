@@ -7,7 +7,6 @@ import Constants from 'expo-constants';
 import useAsyncEffect from 'use-async-effect';
 import { Charger } from '../../../api';
 import { decode } from '../../../util/HerePolyline';
-import { debounce } from 'lodash';
 // @ts-ignore
 import MenuBarIcon from '../../../assets/icons/MenuIcon.svg';
 // @ts-ignore
