@@ -7,13 +7,23 @@ import Constants from 'expo-constants';
 import useAsyncEffect from 'use-async-effect';
 import { Charger } from '../../../api';
 import { decode } from '../../../util/HerePolyline';
+import { debounce } from 'lodash';
 // @ts-ignore
 import MenuBarIcon from '../../../assets/icons/MenuIcon.svg';
 // @ts-ignore
 import LocationIcon from '../../../assets/icons/LocationIcon.svg';
 // @ts-ignore
 import FilterIcon from '../../../assets/icons/FilterIcon.svg';
-import { StyleSheet, View, Dimensions, SafeAreaView, Keyboard, InteractionManager, Alert } from 'react-native';
+import {
+    StyleSheet,
+    View,
+    Dimensions,
+    SafeAreaView,
+    Keyboard,
+    InteractionManager,
+    Alert,
+    ScrollView, Text
+} from 'react-native';
 import { UberMapStyle } from '../../../assets/maps/MapStyle';
 import { ApiService } from '../../../service/ApiService';
 import MapInput from '../../../ui/components/MapInput';
@@ -59,6 +69,18 @@ const styles = StyleSheet.create({
         position: 'absolute',
         top: 25,
         right: 20
+    },
+    searchResultContainer: {
+        top: 120,
+        height: 350,
+        width: '90%',
+        position: 'absolute',
+    },
+    searchItem: {
+        marginBottom: 10,
+        padding: 20,
+        borderRadius: 5,
+        backgroundColor: defaultTheme.colors.white
     }
 });
 
@@ -67,6 +89,7 @@ export default (props: any) => {
     const [coords, setCoords] = useState([]);
     const [markersRef, setMarkersRef] = useState([]);
     const [chargers, setChargers] = useState([]);
+    const [foundChargers, setFoundChargers] = useState([]);
     const [mapSearch, setMapSearch] = useState('');
     const [location, setLocation] = useState({ coords: { latitude: 51.2608984, longitude: 5.6907774 } });
 
@@ -83,12 +106,21 @@ export default (props: any) => {
         await loadNewChargers(location.coords.latitude.toString(), location.coords.longitude.toString());
     }, [location]);
 
+    async function chargerSearch() {
+        try {
+            const c = await ApiService.wrap<Charger[]>(ApiService.default.chargersSearch(mapSearch, '', ''));
+            setFoundChargers([]);
+            setFoundChargers(c.data);
+        } catch (e) {
+        }
+    }
+
     async function loadNewChargers(
         lat: string,
         long: string
     ) {
         try {
-            const c = await ApiService.wrap<Charger[]>(ApiService.default.chargersSearch(lat, long));
+            const c = await ApiService.wrap<Charger[]>(ApiService.default.chargersSearch('', lat, long));
             setChargers(c.data);
         } catch (e) {
             Alert.alert('Error', 'Failed to load chargers');
@@ -246,7 +278,12 @@ export default (props: any) => {
                         placeholder="Voer een locatie in"
                         returnKeyType="done"
                         autoCapitalize="none"
-                        onChangeText={(value) => setMapSearch(value)}
+                        onChangeText={async (value) => {
+                            setMapSearch(value)
+                        }}
+                        onEndEditing={async () => {
+                            await chargerSearch();
+                        }}
                     />
                     <FilterIcon
                         style={styles.filterIcon}
@@ -259,6 +296,13 @@ export default (props: any) => {
                     />
                 </View>
             </SafeAreaView>
+            <ScrollView style={styles.searchResultContainer}>
+                {foundChargers.map(charger => (
+                    <View key={charger.uuid} style={styles.searchItem}>
+                        <Text>{charger.name}</Text>
+                    </View>
+                ))}
+            </ScrollView>
             <SafeAreaView
                 style={styles.bottomBarContainer}
             >

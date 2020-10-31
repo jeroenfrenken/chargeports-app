@@ -83,11 +83,11 @@ export default (props: {
                 </View>
                 <View style={styles.detailItem}>
                     <Text style={styles.detailTitle}>Connectie</Text>
-                    <Text style={styles.detailText}>{ChargerUtil.parseConnectionType(props.charger.chargerConnections[0].connectionTypeId)}</Text>
+                    { props.charger.chargerConnections.length > 0 && <Text style={styles.detailText}>{ChargerUtil.parseConnectionType(props.charger.chargerConnections[0].connectionTypeId)}</Text>}
                 </View>
                 <View style={styles.detailItem}>
                     <Text style={styles.detailTitle}>Stroom</Text>
-                    <Text style={styles.detailText}>{props.charger.chargerConnections[0].powerKw} kW</Text>
+                    { props.charger.chargerConnections.length > 0 && <Text style={styles.detailText}>{props.charger.chargerConnections[0].powerKw} kW</Text>}
                 </View>
             </View>
             <CalloutSubview

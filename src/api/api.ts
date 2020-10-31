@@ -302,6 +302,48 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
     return {
         /**
          * 
+         * @param {ReservationType} [reservationType] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        _null: async (reservationType?: ReservationType, options: any = {}): Promise<RequestArgs> => {
+            const localVarPath = `/api/reservation`;
+            const localVarUrlObj = globalImportUrl.parse(localVarPath, true);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication apiKey required
+            if (configuration && configuration.apiKey) {
+                const localVarApiKeyValue = typeof configuration.apiKey === 'function'
+                    ? await configuration.apiKey("x-api-key")
+                    : await configuration.apiKey;
+                localVarHeaderParameter["x-api-key"] = localVarApiKeyValue;
+            }
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            localVarUrlObj.query = {...localVarUrlObj.query, ...localVarQueryParameter, ...options.query};
+            // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
+            delete localVarUrlObj.search;
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            const needsSerialization = (typeof reservationType !== "string") || localVarRequestOptions.headers['Content-Type'] === 'application/json';
+            localVarRequestOptions.data =  needsSerialization ? JSON.stringify(reservationType !== undefined ? reservationType : {}) : (reservationType || "");
+
+            return {
+                url: globalImportUrl.format(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
          * @param {LoginType} [loginType] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -407,49 +449,13 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
         },
         /**
          * 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        chargersAll: async (options: any = {}): Promise<RequestArgs> => {
-            const localVarPath = `/api/charger`;
-            const localVarUrlObj = globalImportUrl.parse(localVarPath, true);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-            // authentication apiKey required
-            if (configuration && configuration.apiKey) {
-                const localVarApiKeyValue = typeof configuration.apiKey === 'function'
-                    ? await configuration.apiKey("x-api-key")
-                    : await configuration.apiKey;
-                localVarHeaderParameter["x-api-key"] = localVarApiKeyValue;
-            }
-
-
-    
-            localVarUrlObj.query = {...localVarUrlObj.query, ...localVarQueryParameter, ...options.query};
-            // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
-            delete localVarUrlObj.search;
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-
-            return {
-                url: globalImportUrl.format(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
-         * 
+         * @param {string} [query] Search charger
          * @param {string} [lat] Lat of the user
          * @param {string} [_long] Long of user
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        chargersSearch: async (lat?: string, _long?: string, options: any = {}): Promise<RequestArgs> => {
+        chargersSearch: async (query?: string, lat?: string, _long?: string, options: any = {}): Promise<RequestArgs> => {
             const localVarPath = `/api/charger/search`;
             const localVarUrlObj = globalImportUrl.parse(localVarPath, true);
             let baseOptions;
@@ -460,12 +466,8 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
-            // authentication apiKey required
-            if (configuration && configuration.apiKey) {
-                const localVarApiKeyValue = typeof configuration.apiKey === 'function'
-                    ? await configuration.apiKey("x-api-key")
-                    : await configuration.apiKey;
-                localVarHeaderParameter["x-api-key"] = localVarApiKeyValue;
+            if (query !== undefined) {
+                localVarQueryParameter['query'] = query;
             }
 
             if (lat !== undefined) {
@@ -494,87 +496,8 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        previousReservations: async (options: any = {}): Promise<RequestArgs> => {
-            const localVarPath = `/api/reservation/previous`;
-            const localVarUrlObj = globalImportUrl.parse(localVarPath, true);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-            // authentication apiKey required
-            if (configuration && configuration.apiKey) {
-                const localVarApiKeyValue = typeof configuration.apiKey === 'function'
-                    ? await configuration.apiKey("x-api-key")
-                    : await configuration.apiKey;
-                localVarHeaderParameter["x-api-key"] = localVarApiKeyValue;
-            }
-
-
-    
-            localVarUrlObj.query = {...localVarUrlObj.query, ...localVarQueryParameter, ...options.query};
-            // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
-            delete localVarUrlObj.search;
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-
-            return {
-                url: globalImportUrl.format(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
-         * 
-         * @param {ReservationType} [reservationType] 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        reservationCreate: async (reservationType?: ReservationType, options: any = {}): Promise<RequestArgs> => {
+        reservationCreate: async (options: any = {}): Promise<RequestArgs> => {
             const localVarPath = `/api/reservation`;
-            const localVarUrlObj = globalImportUrl.parse(localVarPath, true);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-            // authentication apiKey required
-            if (configuration && configuration.apiKey) {
-                const localVarApiKeyValue = typeof configuration.apiKey === 'function'
-                    ? await configuration.apiKey("x-api-key")
-                    : await configuration.apiKey;
-                localVarHeaderParameter["x-api-key"] = localVarApiKeyValue;
-            }
-
-
-    
-            localVarHeaderParameter['Content-Type'] = 'application/json';
-
-            localVarUrlObj.query = {...localVarUrlObj.query, ...localVarQueryParameter, ...options.query};
-            // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
-            delete localVarUrlObj.search;
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            const needsSerialization = (typeof reservationType !== "string") || localVarRequestOptions.headers['Content-Type'] === 'application/json';
-            localVarRequestOptions.data =  needsSerialization ? JSON.stringify(reservationType !== undefined ? reservationType : {}) : (reservationType || "");
-
-            return {
-                url: globalImportUrl.format(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
-         * 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        upcomingReservations: async (options: any = {}): Promise<RequestArgs> => {
-            const localVarPath = `/api/reservation/upcoming`;
             const localVarUrlObj = globalImportUrl.parse(localVarPath, true);
             let baseOptions;
             if (configuration) {
@@ -616,6 +539,19 @@ export const DefaultApiFp = function(configuration?: Configuration) {
     return {
         /**
          * 
+         * @param {ReservationType} [reservationType] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async _null(reservationType?: ReservationType, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<Reservation>>> {
+            const localVarAxiosArgs = await DefaultApiAxiosParamCreator(configuration)._null(reservationType, options);
+            return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
+                const axiosRequestArgs = {...localVarAxiosArgs.options, url: basePath + localVarAxiosArgs.url};
+                return axios.request(axiosRequestArgs);
+            };
+        },
+        /**
+         * 
          * @param {LoginType} [loginType] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -654,25 +590,14 @@ export const DefaultApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async chargersAll(options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<Charger>>> {
-            const localVarAxiosArgs = await DefaultApiAxiosParamCreator(configuration).chargersAll(options);
-            return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
-                const axiosRequestArgs = {...localVarAxiosArgs.options, url: basePath + localVarAxiosArgs.url};
-                return axios.request(axiosRequestArgs);
-            };
-        },
-        /**
-         * 
+         * @param {string} [query] Search charger
          * @param {string} [lat] Lat of the user
          * @param {string} [_long] Long of user
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async chargersSearch(lat?: string, _long?: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<Charger>>> {
-            const localVarAxiosArgs = await DefaultApiAxiosParamCreator(configuration).chargersSearch(lat, _long, options);
+        async chargersSearch(query?: string, lat?: string, _long?: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<Charger>>> {
+            const localVarAxiosArgs = await DefaultApiAxiosParamCreator(configuration).chargersSearch(query, lat, _long, options);
             return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
                 const axiosRequestArgs = {...localVarAxiosArgs.options, url: basePath + localVarAxiosArgs.url};
                 return axios.request(axiosRequestArgs);
@@ -683,33 +608,8 @@ export const DefaultApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async previousReservations(options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<Reservation>>> {
-            const localVarAxiosArgs = await DefaultApiAxiosParamCreator(configuration).previousReservations(options);
-            return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
-                const axiosRequestArgs = {...localVarAxiosArgs.options, url: basePath + localVarAxiosArgs.url};
-                return axios.request(axiosRequestArgs);
-            };
-        },
-        /**
-         * 
-         * @param {ReservationType} [reservationType] 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async reservationCreate(reservationType?: ReservationType, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Reservation>> {
-            const localVarAxiosArgs = await DefaultApiAxiosParamCreator(configuration).reservationCreate(reservationType, options);
-            return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
-                const axiosRequestArgs = {...localVarAxiosArgs.options, url: basePath + localVarAxiosArgs.url};
-                return axios.request(axiosRequestArgs);
-            };
-        },
-        /**
-         * 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async upcomingReservations(options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<Reservation>>> {
-            const localVarAxiosArgs = await DefaultApiAxiosParamCreator(configuration).upcomingReservations(options);
+        async reservationCreate(options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await DefaultApiAxiosParamCreator(configuration).reservationCreate(options);
             return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
                 const axiosRequestArgs = {...localVarAxiosArgs.options, url: basePath + localVarAxiosArgs.url};
                 return axios.request(axiosRequestArgs);
@@ -724,6 +624,15 @@ export const DefaultApiFp = function(configuration?: Configuration) {
  */
 export const DefaultApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
     return {
+        /**
+         * 
+         * @param {ReservationType} [reservationType] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        _null(reservationType?: ReservationType, options?: any): AxiosPromise<Array<Reservation>> {
+            return DefaultApiFp(configuration)._null(reservationType, options).then((request) => request(axios, basePath));
+        },
         /**
          * 
          * @param {LoginType} [loginType] 
@@ -752,46 +661,22 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
         },
         /**
          * 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        chargersAll(options?: any): AxiosPromise<Array<Charger>> {
-            return DefaultApiFp(configuration).chargersAll(options).then((request) => request(axios, basePath));
-        },
-        /**
-         * 
+         * @param {string} [query] Search charger
          * @param {string} [lat] Lat of the user
          * @param {string} [_long] Long of user
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        chargersSearch(lat?: string, _long?: string, options?: any): AxiosPromise<Array<Charger>> {
-            return DefaultApiFp(configuration).chargersSearch(lat, _long, options).then((request) => request(axios, basePath));
+        chargersSearch(query?: string, lat?: string, _long?: string, options?: any): AxiosPromise<Array<Charger>> {
+            return DefaultApiFp(configuration).chargersSearch(query, lat, _long, options).then((request) => request(axios, basePath));
         },
         /**
          * 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        previousReservations(options?: any): AxiosPromise<Array<Reservation>> {
-            return DefaultApiFp(configuration).previousReservations(options).then((request) => request(axios, basePath));
-        },
-        /**
-         * 
-         * @param {ReservationType} [reservationType] 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        reservationCreate(reservationType?: ReservationType, options?: any): AxiosPromise<Reservation> {
-            return DefaultApiFp(configuration).reservationCreate(reservationType, options).then((request) => request(axios, basePath));
-        },
-        /**
-         * 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        upcomingReservations(options?: any): AxiosPromise<Array<Reservation>> {
-            return DefaultApiFp(configuration).upcomingReservations(options).then((request) => request(axios, basePath));
+        reservationCreate(options?: any): AxiosPromise<void> {
+            return DefaultApiFp(configuration).reservationCreate(options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -803,6 +688,17 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
  * @extends {BaseAPI}
  */
 export class DefaultApi extends BaseAPI {
+    /**
+     * 
+     * @param {ReservationType} [reservationType] 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof DefaultApi
+     */
+    public _null(reservationType?: ReservationType, options?: any) {
+        return DefaultApiFp(this.configuration)._null(reservationType, options).then((request) => request(this.axios, this.basePath));
+    }
+
     /**
      * 
      * @param {LoginType} [loginType] 
@@ -837,24 +733,15 @@ export class DefaultApi extends BaseAPI {
 
     /**
      * 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof DefaultApi
-     */
-    public chargersAll(options?: any) {
-        return DefaultApiFp(this.configuration).chargersAll(options).then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     * 
+     * @param {string} [query] Search charger
      * @param {string} [lat] Lat of the user
      * @param {string} [_long] Long of user
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof DefaultApi
      */
-    public chargersSearch(lat?: string, _long?: string, options?: any) {
-        return DefaultApiFp(this.configuration).chargersSearch(lat, _long, options).then((request) => request(this.axios, this.basePath));
+    public chargersSearch(query?: string, lat?: string, _long?: string, options?: any) {
+        return DefaultApiFp(this.configuration).chargersSearch(query, lat, _long, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -863,29 +750,8 @@ export class DefaultApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof DefaultApi
      */
-    public previousReservations(options?: any) {
-        return DefaultApiFp(this.configuration).previousReservations(options).then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     * 
-     * @param {ReservationType} [reservationType] 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof DefaultApi
-     */
-    public reservationCreate(reservationType?: ReservationType, options?: any) {
-        return DefaultApiFp(this.configuration).reservationCreate(reservationType, options).then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     * 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof DefaultApi
-     */
-    public upcomingReservations(options?: any) {
-        return DefaultApiFp(this.configuration).upcomingReservations(options).then((request) => request(this.axios, this.basePath));
+    public reservationCreate(options?: any) {
+        return DefaultApiFp(this.configuration).reservationCreate(options).then((request) => request(this.axios, this.basePath));
     }
 }
 
