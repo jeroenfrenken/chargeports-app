@@ -3,8 +3,9 @@ import moment from 'moment';
 import React, { useEffect, useState } from 'react';
 // @ts-ignore
 import Down from '../../../assets/icons/Down.svg';
-import { Dimensions, StyleSheet, Text, View } from 'react-native';
-import { Charger } from '../../../api';
+import { Alert, Dimensions, StyleSheet, Text, View } from 'react-native';
+import { Charger, Reservation, ReservationType } from '../../../api';
+import { ApiService } from '../../../service/ApiService';
 import LargeButton from '../../../ui/components/LargeButton';
 import { defaultTheme } from '../../../ui/theme/DefaultTheme';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
@@ -66,7 +67,21 @@ export function ChargerOverview(props: {
     async function confirmReservation() {
         setLoading(true);
 
-        // await props.onConfirm();
+        const reservationDto: ReservationType = {
+            startTime: startDate.format(),
+            endTime: leaveDate.format(),
+            chargerConnection: props.charger.chargerConnections[0].id.toString()
+        }
+
+        try {
+            await ApiService.wrap<Reservation>(ApiService.default.reservationCreate(reservationDto));
+            Alert.alert('Success', `De reservering is bevestigd`);
+        } catch (e) {
+            Alert.alert('Failed', 'Niet mogelijk om de reservering te maken');
+        }
+
+        setLoading(false);
+        await props.onConfirm();
     }
 
     useEffect(() => {
