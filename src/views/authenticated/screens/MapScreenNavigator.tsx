@@ -21,8 +21,7 @@ export default (props) => {
             {
                 screen: ChargerOverview, props: {
                     hideBackground: true,
-                    firstSnapPoint: 1
-                }, name: 'ChargerOverview', snapPoints: [0, height - 250, height]
+                }, name: 'ChargerOverview', snapPoints: [height - 350, (height * 2) - 125]
             }
         ]}/>
     );

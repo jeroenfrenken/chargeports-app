@@ -48,7 +48,17 @@ export function SideBar(props) {
                 </View>
                 <Text style={styles.user}>{user.firstName} {user.lastName}</Text>
             </View>
-            <DrawerItemList {...props} />
+            <DrawerItemList {...props}
+                itemStyle={{
+                    width: 300,
+                    marginLeft: -5
+                }}
+                labelStyle={{
+                    marginLeft: -5
+                }}
+                activeBackgroundColor={defaultTheme.colors.white}
+                activeTintColor={defaultTheme.colors.primary}
+            />
             <View style={ styles.logout }>
                 <Button onPress={() => props.logout()} title="Uitloggen" color={defaultTheme.colors.black}/>
                 <Text style={{

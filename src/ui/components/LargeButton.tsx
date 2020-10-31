@@ -1,13 +1,14 @@
+
 import React from 'react';
 import styled from 'styled-components/native';
 import { TouchableOpacityProps } from 'react-native';
 
 export const NormalButtonContainer = styled.TouchableOpacity<{ color?: string }>`
   background: ${props => props.color || props.theme.colors.primary};
-  padding: 5px;
+  padding: 20px;
   border-radius: 2px;
   width: 100%;
-  min-height: 40px;
+  min-height: 50px;
   
   display: flex;
   justify-content: center;

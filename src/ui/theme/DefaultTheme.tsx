@@ -3,15 +3,15 @@ import { ThemeProvider } from 'styled-components/native';
 
 export const defaultTheme = {
     colors: {
-        primary: '#97d0a3',
+        primary: '#86d29f',
         secondary: '#2b3247',
         white: '#FFFFFF',
-        black: '#000000',
+        black: '#000000'
     },
     fonts: [ 'Roboto', 'sans-serif' ],
     fontSizes: {
         small: '14px',
-        buttonTextSize: '19px',
+        buttonTextSize: '14px',
         medium: '36px',
         large: '64px'
     }
