@@ -1,5 +1,18 @@
+import moment from 'moment';
+import { useState } from 'react';
 import * as React from 'react';
-import {Dimensions, InteractionManager, Keyboard, SafeAreaView, ScrollView, StyleSheet, Text, View} from 'react-native';
+import {
+    Alert,
+    Dimensions,
+    SafeAreaView,
+    ScrollView,
+    StyleSheet,
+    Text,
+    View
+} from 'react-native';
+import useAsyncEffect from 'use-async-effect';
+import { Reservation } from '../../../api';
+import { ApiService } from '../../../service/ApiService';
 import { defaultTheme } from '../../../ui/theme/DefaultTheme';
 import {MenuButton} from "../../../ui/components/MenuButton";
 // @ts-ignore
@@ -85,68 +98,31 @@ const styles = StyleSheet.create({
     }
 });
 
-const PreviousCharges = [
-    {
-        date: '20-10-2020',
-        title: 'AH Eindhoven',
-        address: 'Groeneweg 12',
-        kWh: '20',
-        timeStart: '12:35',
-        timeEnd: '13:35',
-        price: '20,50',
-    },
-    {
-        date: '19-10-2020',
-        title: 'AH Eindhoven',
-        address: 'Groeneweg 12',
-        kWh: '30',
-        timeStart: '10:30',
-        timeEnd: '14:30',
-        price: '30,50',
-    },
-    {
-        date: '18-10-2020',
-        title: 'Strijen',
-        address: 'Rietgansstraat 1',
-        kWh: '40',
-        timeStart: '10:30',
-        timeEnd: '14:30',
-        price: '30,50',
-    },
-    {
-        date: '17-10-2020',
-        title: 'Weert',
-        address: 'Rentemeesterlaan 13',
-        kWh: '10',
-        timeStart: '10:30',
-        timeEnd: '14:30',
-        price: '69,50',
-    },
-    {
-        date: '18-10-2020',
-        title: 'Strijen',
-        address: 'Rietgansstraat 1',
-        kWh: '40',
-        timeStart: '10:30',
-        timeEnd: '14:30',
-        price: '30,50',
-    }
-];
-
 export default function PreviousChargesScreen(props: any) {
+    const [ charges, setChargers ] = useState([]);
+
+    useAsyncEffect(async () => {
+        try {
+            const c = await ApiService.wrap<Reservation[]>(ApiService.default.previousReservations());
+            setChargers(c.data);
+        } catch (e) {
+            Alert.alert('Error', 'Vorige laadbeurten niet gevonden');
+        }
+    }, []);
+
     return (
         <View style={styles.container}>
             <ScrollView style={styles.list}>
-                { PreviousCharges.map((charge) =>
-                    <View style={styles.chargeWrap}>
-                        <Text>{charge.date}</Text>
+                { charges.map((charge: Reservation) =>
+                    <View style={styles.chargeWrap} key={charge.uuid}>
+                        <Text>{ moment(charge.startTime).format('ddd DD MMMM YYYY')}</Text>
                         <View style={styles.infoLineMain}>
                             <View>
-                                <Text style={{fontSize: 20, fontWeight: '600'}}>{ charge.title }</Text>
-                                <Text>{ charge.address }</Text>
+                                <Text style={{fontSize: 20, fontWeight: '600'}}>{ charge.charger.name }</Text>
+                                <Text>{ charge.charger.addressLine }</Text>
                             </View>
                             <View>
-                                <Text style={{fontSize: 20, fontWeight: '600'}}>{ charge.kWh } kWh</Text>
+                                <Text style={{fontSize: 20, fontWeight: '600'}}>{ charge.chargerConnection.powerKw } kWh</Text>
                                 <Text style={{textAlign: 'right'}}>totaal</Text>
                             </View>
                         </View>
@@ -156,16 +132,10 @@ export default function PreviousChargesScreen(props: any) {
                                     <Previous style={{ width: 8, height: 8}}/>
                                 </View>
                                 <View style={styles.infoLine}>
-                                    <Text style={styles.time}>{ charge.timeStart }</Text>
+                                    <Text style={styles.time}>{ moment(charge.startTime).format('DD MMMM YYYY H:mm') }</Text>
                                     <Text style={{ marginTop: 8, marginLeft: 5, marginRight: 5}}>tot</Text>
-                                    <Text style={styles.time}>{ charge.timeEnd }</Text>
+                                    <Text style={styles.time}>{ moment(charge.endTime).format('H:mm') }</Text>
                                 </View>
-                            </View>
-                            <View style={styles.infoLineRight}>
-                                <View style={styles.euroWrap}>
-                                    <Text style={styles.euro}>&euro;</Text>
-                                </View>
-                                <Text style={{marginTop: 8}}>{ charge.price }</Text>
                             </View>
                         </View>
                     </View>

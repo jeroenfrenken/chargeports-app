@@ -226,8 +226,6 @@ export default (props: any) => {
                         }}
                         onPress={async () => await showChargerOverView(charger)}
                         onDeselect={() => {
-                            console.log('deselect');
-
                             props.dismiss();
                         }}
                     >
