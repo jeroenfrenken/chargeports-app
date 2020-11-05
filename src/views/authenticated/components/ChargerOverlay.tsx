@@ -14,7 +14,7 @@ const styles = StyleSheet.create({
         backgroundColor: defaultTheme.colors.white,
         padding: 15,
         borderRadius: 10,
-        height: 240
+        height: 250
         // shadowColor: '#000',
         // shadowRadius: 5,
         // shadowOpacity: 0.4,
@@ -92,6 +92,7 @@ export default (props: {
             </View>
             <CalloutSubview
                 onPress={() => {
+                    console.log('RESERVATION STARTED');
                     props.openReservationScreen();
                 }}
             >

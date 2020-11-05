@@ -1,5 +1,8 @@
+import moment from 'moment';
 import * as React from 'react';
 import {StyleSheet, Text, View} from 'react-native';
+import { Reservation } from '../../../api';
+import Previous from '../../../assets/icons/Previous.svg';
 // @ts-ignore
 import Upcomming from "../../../assets/icons/Upcomming.svg";
 import {defaultTheme} from "../../../ui/theme/DefaultTheme";
@@ -63,39 +66,33 @@ const styles = StyleSheet.create({
 });
 
 export default (props) => {
-    const charge = props.charge;
+    const charge: Reservation = props.charge;
 
     return (
         <View style={styles.chargeWrap}>
             <View style={styles.date}>
-                <Text>{charge.date}</Text>
+                <Text>{ moment(charge.startTime).format('ddd DD MMMM YYYY')}</Text>
             </View>
             <View style={styles.infoLineMain}>
                 <View>
-                    <Text style={{fontSize: 20, fontWeight: '600'}}>{charge.title}</Text>
-                    <Text>{charge.address}</Text>
+                    <Text style={{fontSize: 20, fontWeight: '600'}}>{ charge.charger.name }</Text>
+                    <Text>{ charge.charger.addressLine }</Text>
                 </View>
                 <View>
-                    <Text style={{fontSize: 20, fontWeight: '600'}}>~{charge.kWh} kWh</Text>
+                    <Text style={{fontSize: 20, fontWeight: '600'}}>~{charge.chargerConnection.powerKw * 2} kW</Text>
                     <Text style={{textAlign: 'right'}}>schatting</Text>
                 </View>
             </View>
             <View style={styles.infoLineMain}>
                 <View style={styles.infoLine}>
                     <View style={styles.previousWrap}>
-                        <Upcomming style={{width: 8, height: 8}}/>
+                        <Previous style={{ width: 8, height: 8}}/>
                     </View>
                     <View style={styles.infoLine}>
-                        <Text style={styles.time}>{charge.timeStart}</Text>
-                        <Text style={{marginTop: 8, marginLeft: 5, marginRight: 5}}>tot</Text>
-                        <Text style={styles.time}>{charge.timeEnd}</Text>
+                        <Text style={styles.time}>{ moment(charge.startTime).format('DD MMMM YYYY H:mm') }</Text>
+                        <Text style={{ marginTop: 8, marginLeft: 5, marginRight: 5}}>tot</Text>
+                        <Text style={styles.time}>{ moment(charge.endTime).format('H:mm') }</Text>
                     </View>
-                </View>
-                <View style={styles.infoLineRight}>
-                    <View style={styles.euroWrap}>
-                        <Text style={styles.euro}>&euro;</Text>
-                    </View>
-                    <Text style={{marginTop: 8}}>~{charge.price}</Text>
                 </View>
             </View>
         </View>

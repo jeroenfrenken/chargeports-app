@@ -17,7 +17,6 @@ import { defaultTheme } from '../../../ui/theme/DefaultTheme';
 import {MenuButton} from "../../../ui/components/MenuButton";
 // @ts-ignore
 import MenuBarIcon from "../../../assets/icons/MenuIcon.svg";
-import PreviousCharge from "../components/PreviousCharge";
 // @ts-ignore
 import Previous from "../../../assets/icons/Previous.svg";
 
@@ -60,11 +59,67 @@ const styles = StyleSheet.create({
     list: {
         paddingLeft: 20,
         paddingRight: 20,
+        paddingTop: 150,
         overflow: 'visible'
     },
     listWrap: {
         paddingTop: 150,
         backgroundColor: 'transparent'
+    },
+    date: {
+        backgroundColor: '#F3F3F3',
+        padding: 10,
+        borderRadius: 5,
+    },
+    chargeWrap: {
+        shadowColor: defaultTheme.colors.black,
+        shadowOffset: {width: 5, height: 5},
+        shadowRadius: 20,
+        shadowOpacity: 0.1,
+        borderRadius: 20,
+        backgroundColor: defaultTheme.colors.white,
+        width: '100%',
+        padding: 20,
+        marginBottom: 20,
+    },
+    previousWrap: {
+        padding: 5,
+        borderRadius: 5,
+        width: 30,
+        height: 30,
+        backgroundColor: '#97d0a352',
+        marginRight: 10
+    },
+    euroWrap: {
+        padding: 5,
+        paddingLeft: 8,
+        borderRadius: 5,
+        width: 30,
+        height: 30,
+        backgroundColor: '#673ab747',
+        marginRight: 10
+    },
+    euro: {
+        fontSize: 18
+    },
+    time: {
+        fontWeight: "600",
+        marginTop: 8
+    },
+    infoLine: {
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+    },
+    infoLineMain: {
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        marginTop: 20
+    },
+    infoLineRight: {
+        display: 'flex',
+        flexDirection: 'row',
     }
 });
 

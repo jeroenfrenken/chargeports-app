@@ -1,5 +1,19 @@
+import { useState } from 'react';
 import * as React from 'react';
-import {Dimensions, InteractionManager, Keyboard, SafeAreaView, ScrollView, StyleSheet, Text, View} from 'react-native';
+import {
+    Alert,
+    Dimensions,
+    InteractionManager,
+    Keyboard,
+    SafeAreaView,
+    ScrollView,
+    StyleSheet,
+    Text,
+    View
+} from 'react-native';
+import useAsyncEffect from 'use-async-effect';
+import { Reservation } from '../../../api';
+import { ApiService } from '../../../service/ApiService';
 import {defaultTheme} from '../../../ui/theme/DefaultTheme';
 import {MenuButton} from "../../../ui/components/MenuButton";
 // @ts-ignore
@@ -89,11 +103,22 @@ const PreviousCharges = [
 ];
 
 export default function UpcommingChargesScreen(props: any) {
+    const [ charges, setChargers ] = useState([]);
+
+    useAsyncEffect(async () => {
+        try {
+            const c = await ApiService.wrap<Reservation[]>(ApiService.default.upcomingReservations());
+            setChargers(c.data);
+        } catch (e) {
+            Alert.alert('Error', 'Opkomende laadbeurten niet gevonden');
+        }
+    }, []);
+
     return (
         <View style={styles.container}>
             <View style={styles.listWrap}>
                 <ScrollView style={styles.list}>
-                    {PreviousCharges.map((charge) =>
+                    {charges.map((charge) =>
                         <UpcommingCharge charge={charge} key={charge.id}/>
                     )}
                 </ScrollView>

@@ -101,10 +101,6 @@ export default (props: any) => {
         await updateMapLocation();
     }, []);
 
-    useAsyncEffect(async () => {
-        await loadNewChargers(location.coords.latitude.toString(), location.coords.longitude.toString());
-    }, [location]);
-
     async function chargerSearch() {
         try {
             const c = await ApiService.wrap<Charger[]>(ApiService.default.chargersSearch(mapSearch, '', ''));
@@ -124,11 +120,15 @@ export default (props: any) => {
         } catch (e) {
             Alert.alert('Error', 'Failed to load chargers');
         }
+
+
     }
 
     async function updateMapLocation() {
         let currentLocation = await Location.getCurrentPositionAsync({});
         setLocation(currentLocation);
+
+        await loadNewChargers(location.coords.latitude.toString(), location.coords.longitude.toString());
 
         if ( mapRef.current === undefined ) return null;
 
@@ -225,9 +225,6 @@ export default (props: any) => {
                             longitude: parseFloat(charger.longitude)
                         }}
                         onPress={async () => await showChargerOverView(charger)}
-                        onDeselect={() => {
-                            props.dismiss();
-                        }}
                     >
                         <MapMarker/>
                         <Callout
