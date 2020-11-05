@@ -17,6 +17,7 @@ import { defaultTheme } from '../../../ui/theme/DefaultTheme';
 import {MenuButton} from "../../../ui/components/MenuButton";
 // @ts-ignore
 import MenuBarIcon from "../../../assets/icons/MenuIcon.svg";
+import PreviousCharge from "../components/PreviousCharge";
 // @ts-ignore
 import Previous from "../../../assets/icons/Previous.svg";
 
@@ -28,7 +29,7 @@ const styles = StyleSheet.create({
     },
     topBarContainer: {
         flex: 1,
-        top: 30,
+        top: 60,
         height: 50,
         width: '90%',
         left: '5%',
@@ -38,63 +39,32 @@ const styles = StyleSheet.create({
     menuButton: {
         marginTop: 0
     },
-    title: {
-        fontSize: 26
-    },
-    list: {
-        paddingTop: 100,
-        paddingBottom: 200,
-        padding: 20
-    },
-    chargeWrap: {
+    titleWrap: {
+        backgroundColor: defaultTheme.colors.white,
+        height: 45,
+        padding: 10,
+        borderRadius: 5,
         shadowColor: defaultTheme.colors.black,
         shadowOffset: {width: 5, height: 5},
         shadowRadius: 20,
         shadowOpacity: 0.1,
-        borderRadius: 20,
-        backgroundColor: defaultTheme.colors.white,
-        width: '100%',
-        padding: 20,
-        marginBottom: 20,
     },
-    previousWrap: {
-        padding: 5,
-        borderRadius: 5,
-        width: 30,
+    title: {
+        fontSize: 20,
         height: 30,
-        backgroundColor: '#97d0a352',
+        fontWeight: '600'
+    },
+    icon: {
         marginRight: 10
     },
-    euroWrap: {
-        padding: 5,
-        paddingLeft: 8,
-        borderRadius: 5,
-        width: 30,
-        height: 30,
-        backgroundColor: '#673ab747',
-        marginRight: 10
+    list: {
+        paddingLeft: 20,
+        paddingRight: 20,
+        overflow: 'visible'
     },
-    euro: {
-        fontSize: 18
-    },
-    time: {
-        fontWeight: "600",
-        marginTop: 8
-    },
-    infoLine: {
-        display: 'flex',
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-    },
-    infoLineMain: {
-        display: 'flex',
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        marginTop: 20
-    },
-    infoLineRight: {
-        display: 'flex',
-        flexDirection: 'row',
+    listWrap: {
+        paddingTop: 150,
+        backgroundColor: 'transparent'
     }
 });
 
@@ -150,7 +120,9 @@ export default function PreviousChargesScreen(props: any) {
                     }}>
                     <MenuBarIcon/>
                 </MenuButton>
-                <Text style={styles.title}>Vorige laadbeurten</Text>
+                <View style={styles.titleWrap}>
+                    <Text style={styles.title}><Previous style={styles.icon}/> Vorige laadbeurten</Text>
+                </View>
             </SafeAreaView>
         </View>
     );
