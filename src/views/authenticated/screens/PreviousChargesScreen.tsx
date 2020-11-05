@@ -122,7 +122,7 @@ export default function PreviousChargesScreen(props: any) {
                                 <Text>{ charge.charger.addressLine }</Text>
                             </View>
                             <View>
-                                <Text style={{fontSize: 20, fontWeight: '600'}}>{ charge.chargerConnection.powerKw } kWh</Text>
+                                <Text style={{fontSize: 20, fontWeight: '600'}}>{ charge.chargerConnection.powerKw } kW</Text>
                                 <Text style={{textAlign: 'right'}}>totaal</Text>
                             </View>
                         </View>
